@@ -1,0 +1,65 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Bezier" Collapsed="true">
+    <Position X="0.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAACAAAAAAAAAAAIAAAAAAAAAAAACgAAAAAAAAAA=</HashCode>
+      <FileName>Bezier.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Line" Collapsed="true">
+    <Position X="5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAAAAACAAAAAAAgAAIAAIAAAAAAAAAAAAAAAAABAAA=</HashCode>
+      <FileName>Line.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Point" Collapsed="true">
+    <Position X="7.25" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAgAAiAAYGAAAAAAAACAAAAABgAGAAAAA=</HashCode>
+      <FileName>Point.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MyPolygon" Collapsed="true">
+    <Position X="2.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAACAAAAAAAAAEAIAACAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>MyPolygon.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Shape" Collapsed="true">
+    <Position X="3.75" Y="0.5" Width="1.5" />
+    <NestedTypes>
+      <Typedef Name="Shape::PDrawPointFunc" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Shape.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Typedef>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAACA=</HashCode>
+      <FileName>Shape.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="System" Collapsed="true">
+    <Position X="9.75" Y="0.5" Width="1.5" />
+    <NestedTypes>
+      <Enum Name="System::InputType" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>System.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+      <Typedef Name="System::PDrawPointFunc" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>System.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Typedef>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>IBFgABDAAIJCCAAAggIABkAAACMAwAEQBAIBIgAIAKA=</HashCode>
+      <FileName>System.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Microsoft YaHei UI" Size="9" />
+</ClassDiagram>
