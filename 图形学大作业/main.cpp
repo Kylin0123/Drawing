@@ -4,10 +4,11 @@
 
 System system_instance;
 
-#define MAX_CHAR 128
+
 
 /*show string on the screen*/
 void drawString(std::string str){
+	static const int MAX_CHAR = 128;
 	static int isFirstCall = 1;
 	static GLuint lists;
 	if (isFirstCall) {
@@ -34,10 +35,13 @@ void onDisplay() {
 
 	glRasterPos2i(0, system_instance.getWindowSizeY() - 15);  //起始位置 
 
-	drawString(std::string("mousePos:") 
+	drawString(std::string("state:") 
+		+ system_instance.getStateString() + "    "
+		+ std::string("inputType:") 
+		+ system_instance.getInputTypeString() + "    "
+		+ std::string("mousePos:")
 		+ std::to_string(system_instance.getMouseX()) + ','
-		+ std::to_string(system_instance.getMouseY()) + "    "
-		+ std::string("state:") + (system_instance.getIsEditable() ? "editable" : "drawing")
+		+ std::to_string(system_instance.getMouseY())
 	);
 
 	glutSwapBuffers();
@@ -76,7 +80,7 @@ void onMontion(int x, int y) {
 	system_instance.setMousePos(x, y); 
 
 	if (system_instance.getIsEditable() == true)
-		system_instance.setFocusPoint(x, y);
+		system_instance.moveFocusPointTo(x, y);
 	glutPostRedisplay();
 }
 
@@ -110,6 +114,12 @@ void mainMenu(int id) {
 		system_instance.setInputType(System::InputType::POLYGON);
 		break;
 	case 4:
+		system_instance.setInputType(System::InputType::CIRCLE);
+		break;
+	case 5:
+		system_instance.setInputType(System::InputType::ELLIPSE);
+		break;
+	case 6:
 		system_instance.setInputType(System::InputType::FILL);
 		break;
 	default:
@@ -139,7 +149,9 @@ int main(int argc, char** argv) {
 	glutAddMenuEntry("直线", 1);
 	glutAddMenuEntry("曲线", 2);
 	glutAddMenuEntry("多边形", 3);
-	glutAddMenuEntry("填充区域", 4);
+	glutAddMenuEntry("圆", 4);
+	glutAddMenuEntry("椭圆", 5);
+	glutAddMenuEntry("填充区域", 6);
 	glutAttachMenu(GLUT_RIGHT_BUTTON);
 
 	init();

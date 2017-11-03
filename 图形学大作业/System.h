@@ -4,8 +4,10 @@
 #include "Line.h"
 #include "Bezier.h"
 #include "MyPolygon.h"
+#include "Circle.h"
 #include <vector>
 #include <memory>
+#include <cassert>
 
 class System
 {
@@ -16,10 +18,11 @@ public:
 	void down(int x, int y);
 	void up(int x, int y);
 	void addPoint(int x, int y);
-	void addLine(int x1, int y1, int x2, int y2);
+	void addLine(const Point & p1, const Point & p2);
 	void addBezier();
 	void addMyPolygon();
-	enum InputType { LINE, BEZIER, POLYGON, FILL };
+	void addCircle(const Point & p1, const Point & p2);
+	enum InputType { LINE, BEZIER, POLYGON, CIRCLE, ELLIPSE, FILL };
 	void setInputType(InputType inputType);
 	InputType getInputType() const;
 	void setWindowSize(int width, int height);
@@ -30,16 +33,21 @@ public:
 	int getWindowSizeX() const { return windowWidth; }
 	int getWindowSizeY() const { return windowHeight; }
 	bool getIsEditable() const { return isEditable; }
+	std::string getStateString() { return isEditable ? "editable" : "drawing"; }
+	std::string getInputTypeString();
 	typedef void(WINAPI *PDrawPointFunc)(GLint, GLint);
 	void setDrawPointFunc(PDrawPointFunc pDrawPointFunc);
-	void setFocusPoint(int x, int y);
+	void moveFocusPointTo(int x, int y);
 	void clearPointStack();
 	const int bezierNum;
+protected:
+	std::tuple<Point, int> caculateCirclePos(const Point & start, const Point & end);
 private:
 	std::vector<std::shared_ptr<Point> > points;
 	std::vector<std::shared_ptr<Line> > lines;
 	std::vector<std::shared_ptr<Bezier> > beziers;
 	std::vector<std::shared_ptr<MyPolygon> > polygons;
+	std::vector<std::shared_ptr<Circle> > circles;
 	InputType inputType;
 	PDrawPointFunc pDrawPointFunc;
 	std::vector<Point> point_stack;
