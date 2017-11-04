@@ -5,6 +5,7 @@
 #include "Bezier.h"
 #include "MyPolygon.h"
 #include "Circle.h"
+#include "Ellipise.h"
 #include <vector>
 #include <memory>
 #include <cassert>
@@ -22,7 +23,8 @@ public:
 	void addBezier();
 	void addMyPolygon();
 	void addCircle(const Point & p1, const Point & p2);
-	enum InputType { LINE, BEZIER, POLYGON, CIRCLE, ELLIPSE, FILL };
+	void addEllipise(const Point & p1, const Point & p2);
+	enum InputType { LINE, BEZIER, POLYGON, CIRCLE, ELLIPISE, FILL };
 	void setInputType(InputType inputType);
 	InputType getInputType() const;
 	void setWindowSize(int width, int height);
@@ -48,6 +50,7 @@ private:
 	std::vector<std::shared_ptr<Bezier> > beziers;
 	std::vector<std::shared_ptr<MyPolygon> > polygons;
 	std::vector<std::shared_ptr<Circle> > circles;
+	std::vector<std::shared_ptr<Ellipise> > ellipises;
 	InputType inputType;
 	PDrawPointFunc pDrawPointFunc;
 	std::vector<Point> point_stack;

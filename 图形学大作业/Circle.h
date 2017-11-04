@@ -11,6 +11,6 @@ public:
 private:
 	Point centre;
 	int radius;
-	void draw8points (const Point & centre, int cur_x, int cur_y) const;
+	void draw8points (int cur_x, int cur_y) const;
 };
 

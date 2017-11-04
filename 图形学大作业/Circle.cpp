@@ -18,7 +18,7 @@ void Circle::draw() const
 		if (p < 0) {
 			int cur_x = x_c + 1;
 			int cur_y = y_c;
-			draw8points(centre, cur_x, cur_y);
+			draw8points(cur_x, cur_y);
 			p = p + 2 * x_c + 3;
 			x_c = x_c + 1;
 			// y_c = y_c;
@@ -26,7 +26,7 @@ void Circle::draw() const
 		else {
 			int cur_x = x_c + 1;
 			int cur_y = y_c - 1;
-			draw8points(centre, cur_x, cur_y);
+			draw8points(cur_x, cur_y);
 			p = p + 2 * (x_c + 1) + 3 - 2 * y_c - 2;
 			x_c = x_c + 1;
 			y_c = y_c - 1;
@@ -34,7 +34,7 @@ void Circle::draw() const
 	}
 }
 
-void Circle::draw8points(const Point & centre, int cur_x, int cur_y) const
+void Circle::draw8points(int cur_x, int cur_y) const
 {
 	pDrawPointFunc(centre.getX() - cur_x, centre.getY() - cur_y);
 	pDrawPointFunc(centre.getX() - cur_x, centre.getY() + cur_y);

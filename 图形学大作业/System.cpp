@@ -10,7 +10,7 @@ System::System():
 
 System::~System()
 {
-}
+}	
 
 void System::draw()
 {
@@ -29,11 +29,14 @@ void System::draw()
 	for (auto & c : circles) {
 		c->draw();
 	}
+	for (auto & e : ellipises) {
+		e->draw();
+	}
 
 	if (point_stack.size() < 1) return;
 
 	switch (inputType) {
-	case LINE:
+	case LINE: {
 		if (isEditable) {
 			assert(point_stack.size() == 2);
 			point_stack[0].strongDraw();
@@ -45,9 +48,10 @@ void System::draw()
 			Line(point_stack[0], Point(mouseX, mouseY)).draw();
 		}
 		break;
+	}
 	case BEZIER:
 		break;
-	case POLYGON:
+	case POLYGON: {
 		if (isEditable) {
 			assert(point_stack.size() >= 3);
 			for (int i = 0; i < point_stack.size() - 1; i++) {
@@ -64,6 +68,7 @@ void System::draw()
 			Line(point_stack.back(), Point(mouseX, mouseY)).draw();
 		}
 		break;
+	}
 	case CIRCLE: {
 		if (isEditable) {
 			assert(point_stack.size() == 2);
@@ -76,10 +81,34 @@ void System::draw()
 			std::tuple<Point, int> ret = caculateCirclePos(point_stack[0], Point(mouseX, mouseY));
 			Circle(std::get<0>(ret), std::get<1>(ret)).draw();
 		}
+		break;
 	}
+	case ELLIPISE: {
+		if (isEditable) {
+			assert(point_stack.size() == 2);
+			const Point & p1 = point_stack[0];
+			const Point & p2 = point_stack[1];
+			p1.strongDraw();
+			p2.strongDraw();
+			int centre_x = (p1.getX() + p2.getX()) / 2;
+			int centre_y = (p1.getY() + p2.getY()) / 2;
+			int r_x = abs(centre_x - p1.getX());
+			int r_y = abs(centre_y - p1.getY());
+			Point centre(centre_x, centre_y);
+			Ellipise(centre, r_x, r_y).draw();
+		}
+		else {
+			const Point & p1 = point_stack[0];
+			const Point p2(mouseX, mouseY);
+			int centre_x = (p1.getX() + p2.getX()) / 2;
+			int centre_y = (p1.getY() + p2.getY()) / 2;
+			int r_x = abs(centre_x - p1.getX());
+			int r_y = abs(centre_y - p1.getY());
+			Point centre(centre_x, centre_y);
+			Ellipise(centre, r_x, r_y).draw();
+		}
 		break;
-	case ELLIPSE:
-		break;
+	}
 	case FILL:
 		break;
 	default:
@@ -90,7 +119,7 @@ void System::draw()
 void System::down(int x, int y)
 {
 	switch (inputType) {
-	case LINE: 
+	case LINE: {
 		if (!isEditable)
 			point_stack.push_back(Point(x, y));
 		else { //is editable
@@ -110,13 +139,15 @@ void System::down(int x, int y)
 			}
 		}
 		break;
-	case BEZIER:
+	}
+	case BEZIER: {
 		point_stack.push_back(Point(x, y));
 		if (point_stack.size() >= bezierNum) {
 			addBezier();
 			point_stack.clear();
 		}
 		break;
+	}
 	case POLYGON: {
 		if (!isEditable) {
 			static DWORD last_time = 0;
@@ -166,10 +197,32 @@ void System::down(int x, int y)
 				setIsEditable(false);
 			}
 		}
+		break;
 	}
+	case ELLIPISE: {
+		if (!isEditable) {
+			assert(point_stack.size() == 0);
+			point_stack.push_back(Point(x, y));
+		}
+		else {
+			assert(point_stack.size() == 2);
+			Point & start = point_stack[0];
+			Point & end = point_stack[1];
+			if (start.nearBy(x, y)) {
+				focus_point = &start;
+			}
+			else if (end.nearBy(x, y)) {
+				focus_point = &end;
+			}
+			else {
+				addEllipise(start, end);
+				point_stack.clear();
+				setIsEditable(false);
+			}
+		}
 		break;
-	case ELLIPSE:
-		break;
+	}
+		
 	case FILL:
 		break;
 	default:
@@ -180,7 +233,7 @@ void System::down(int x, int y)
 void System::up(int x, int y)
 {
 	switch (inputType) {
-	case LINE:
+	case LINE: {
 		if (point_stack.empty()) return;
 		if (!isEditable) {
 			point_stack.push_back(Point(x, y));
@@ -190,7 +243,8 @@ void System::up(int x, int y)
 			//is editable
 		}
 		break;
-	case CIRCLE:
+	}
+	case CIRCLE: {
 		if (point_stack.empty()) return;
 		if (!isEditable) {
 			point_stack.push_back(Point(x, y));
@@ -201,6 +255,19 @@ void System::up(int x, int y)
 			//is editable
 		}
 		break;
+	}
+	case ELLIPISE: {
+		if (point_stack.empty()) return;
+		if (!isEditable) {
+			point_stack.push_back(Point(x, y));
+			assert(point_stack.size() == 2);
+			setIsEditable(true);
+		}
+		else {
+			//is editable
+		}
+		break;
+	}
 	default:
 		break;
 	}
@@ -242,6 +309,18 @@ void System::addCircle(const Point & p1, const Point & p2)
 	);
 }
 
+void System::addEllipise(const Point & p1, const Point & p2)
+{
+	int centre_x = (p1.getX() + p2.getX()) / 2;
+	int centre_y = (p1.getY() + p2.getY()) / 2;
+	int r_x = abs(centre_x - p1.getX());
+	int r_y = abs(centre_y - p1.getY());
+	Point centre(centre_x, centre_y);
+	ellipises.push_back(
+		std::shared_ptr<Ellipise>(new Ellipise(centre, r_x, r_y))
+	);
+}
+
 void System::setInputType(InputType inputType)
 {
 	this->inputType = inputType;
@@ -275,7 +354,7 @@ std::string System::getInputTypeString() {
 	case BEZIER: return "BEZIER";
 	case POLYGON: return "POLYGON";
 	case CIRCLE: return "CIRCLE";
-	case ELLIPSE: return "ELLIPSE";
+	case ELLIPISE: return "ELLIPISE";
 	case FILL: return "FILL";
 	default: assert(0);
 	}

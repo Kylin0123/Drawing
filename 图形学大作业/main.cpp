@@ -117,7 +117,7 @@ void mainMenu(int id) {
 		system_instance.setInputType(System::InputType::CIRCLE);
 		break;
 	case 5:
-		system_instance.setInputType(System::InputType::ELLIPSE);
+		system_instance.setInputType(System::InputType::ELLIPISE);
 		break;
 	case 6:
 		system_instance.setInputType(System::InputType::FILL);

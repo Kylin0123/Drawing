@@ -39,6 +39,9 @@
     <ClCompile Include="Circle.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="Ellipise.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="System.h">
@@ -60,6 +63,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Circle.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Ellipise.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
