@@ -1,9 +1,7 @@
 #include "System.h"
-#include <cassert>
-#include <tuple>
 
 System::System():
-	inputType(LINE), bezierNum(3), isEditable(false)
+	inputType(LINE), isEditable(false), shapesManager(&linesManager)
 {
 }
 
@@ -14,316 +12,54 @@ System::~System()
 
 void System::draw()
 {
-	for (auto & p : points) {
-		p->draw();
-	}
-	for (auto & l : lines) {
-		l->draw();
-	}
-	for (auto & b : beziers) {
-		b->draw();
-	}
-	for (auto & p : polygons) {
-		p->draw();
-	}
-	for (auto & c : circles) {
-		c->draw();
-	}
-	for (auto & e : ellipises) {
-		e->draw();
-	}
-
-	if (point_stack.size() < 1) return;
-
-	switch (inputType) {
-	case LINE: {
-		if (isEditable) {
-			assert(point_stack.size() == 2);
-			point_stack[0].strongDraw();
-			point_stack[1].strongDraw();
-			Line(point_stack[0], point_stack[1]).draw();
-		}
-		else {
-			assert(point_stack.size() == 1);
-			Line(point_stack[0], Point(mouseX, mouseY)).draw();
-		}
-		break;
-	}
-	case BEZIER:
-		break;
-	case POLYGON: {
-		if (isEditable) {
-			assert(point_stack.size() >= 3);
-			for (int i = 0; i < point_stack.size() - 1; i++) {
-				point_stack[i].strongDraw();
-				Line(point_stack[i], point_stack[i + 1]).draw();
-			}
-			point_stack.back().strongDraw();
-			Line(point_stack.back(), point_stack.front()).draw();
-		}
-		else {
-			for (int i = 0; i < point_stack.size() - 1; i++) {
-				Line(point_stack[i], point_stack[i + 1]).draw();
-			}
-			Line(point_stack.back(), Point(mouseX, mouseY)).draw();
-		}
-		break;
-	}
-	case CIRCLE: {
-		if (isEditable) {
-			assert(point_stack.size() == 2);
-			std::tuple<Point, int> ret = caculateCirclePos(point_stack[0], point_stack[1]);
-			Circle(std::get<0>(ret), std::get<1>(ret)).draw();
-			point_stack[0].strongDraw();
-			point_stack[1].strongDraw();
-		}
-		else {
-			std::tuple<Point, int> ret = caculateCirclePos(point_stack[0], Point(mouseX, mouseY));
-			Circle(std::get<0>(ret), std::get<1>(ret)).draw();
-		}
-		break;
-	}
-	case ELLIPISE: {
-		if (isEditable) {
-			assert(point_stack.size() == 2);
-			const Point & p1 = point_stack[0];
-			const Point & p2 = point_stack[1];
-			p1.strongDraw();
-			p2.strongDraw();
-			int centre_x = (p1.getX() + p2.getX()) / 2;
-			int centre_y = (p1.getY() + p2.getY()) / 2;
-			int r_x = abs(centre_x - p1.getX());
-			int r_y = abs(centre_y - p1.getY());
-			Point centre(centre_x, centre_y);
-			Ellipise(centre, r_x, r_y).draw();
-		}
-		else {
-			const Point & p1 = point_stack[0];
-			const Point p2(mouseX, mouseY);
-			int centre_x = (p1.getX() + p2.getX()) / 2;
-			int centre_y = (p1.getY() + p2.getY()) / 2;
-			int r_x = abs(centre_x - p1.getX());
-			int r_y = abs(centre_y - p1.getY());
-			Point centre(centre_x, centre_y);
-			Ellipise(centre, r_x, r_y).draw();
-		}
-		break;
-	}
-	case FILL:
-		break;
-	default:
-		assert(0);
-	}
+	linesManager.drawAll(mouseX, mouseY, isEditable);
+	beziersManager.drawAll(mouseX, mouseY, isEditable);
+	polygonsManager.drawAll(mouseX, mouseY, isEditable);
+	circlesManager.drawAll(mouseX, mouseY, isEditable);
+	ellipisesManager.drawAll(mouseX, mouseY, isEditable);
 }
 
 void System::down(int x, int y)
 {
-	switch (inputType) {
-	case LINE: {
-		if (!isEditable)
-			point_stack.push_back(Point(x, y));
-		else { //is editable
-			assert(point_stack.size() == 2);
-			Point & start = point_stack[0];
-			Point & end = point_stack[1];
-			if (start.nearBy(x, y) == true) {
-				focus_point = &start;
-			}
-			else if (end.nearBy(x, y) == true) {
-				focus_point = &end;
-			}
-			else { //click on blank space
-				addLine(start, end);
-				point_stack.clear();
-				setIsEditable(false);
-			}
-		}
-		break;
-	}
-	case BEZIER: {
-		point_stack.push_back(Point(x, y));
-		if (point_stack.size() >= bezierNum) {
-			addBezier();
-			point_stack.clear();
-		}
-		break;
-	}
-	case POLYGON: {
-		if (!isEditable) {
-			static DWORD last_time = 0;
-			DWORD time = GetCurrentTime();
-			if (time - last_time <= 200) {
-				//double click time is shorter than 200 ms
-				setIsEditable(true);
-			}
-			else
-				point_stack.push_back(Point(x, y));
-			last_time = time;
-		}
-		else { // is editable
-			bool flag = false;
-			for (int i = 0; i < point_stack.size(); i++) {
-				if (point_stack[i].nearBy(x, y)) {
-					focus_point = &point_stack[i];
-					flag = true;
-				}
-			}
-			if (!flag) {
-				setIsEditable(false);
-				addMyPolygon();
-				point_stack.clear();
-			}
-		}
-		break;
-	}
-	case CIRCLE: {
-		if (!isEditable) {
-			assert(point_stack.size() == 0);
-			point_stack.push_back(Point(x, y));
-		}
-		else {
-			assert(point_stack.size() == 2);
-			Point & start = point_stack[0];
-			Point & end = point_stack[1];
-			if (start.nearBy(x, y)) {
-				focus_point = &start;
-			}
-			else if (end.nearBy(x, y)) {
-				focus_point = &end;
-			}
-			else {
-				addCircle(start, end);
-				point_stack.clear();
-				setIsEditable(false);
-			}
-		}
-		break;
-	}
-	case ELLIPISE: {
-		if (!isEditable) {
-			assert(point_stack.size() == 0);
-			point_stack.push_back(Point(x, y));
-		}
-		else {
-			assert(point_stack.size() == 2);
-			Point & start = point_stack[0];
-			Point & end = point_stack[1];
-			if (start.nearBy(x, y)) {
-				focus_point = &start;
-			}
-			else if (end.nearBy(x, y)) {
-				focus_point = &end;
-			}
-			else {
-				addEllipise(start, end);
-				point_stack.clear();
-				setIsEditable(false);
-			}
-		}
-		break;
-	}
-		
-	case FILL:
-		break;
-	default:
-		assert(0);
-	}
+	shapesManager->down(x, y, isEditable, focus_point);
 }
 
 void System::up(int x, int y)
 {
-	switch (inputType) {
-	case LINE: {
-		if (point_stack.empty()) return;
-		if (!isEditable) {
-			point_stack.push_back(Point(x, y));
-			setIsEditable(true);
-		}
-		else {
-			//is editable
-		}
-		break;
-	}
-	case CIRCLE: {
-		if (point_stack.empty()) return;
-		if (!isEditable) {
-			point_stack.push_back(Point(x, y));
-			assert(point_stack.size() == 2);
-			setIsEditable(true);
-		}
-		else {
-			//is editable
-		}
-		break;
-	}
-	case ELLIPISE: {
-		if (point_stack.empty()) return;
-		if (!isEditable) {
-			point_stack.push_back(Point(x, y));
-			assert(point_stack.size() == 2);
-			setIsEditable(true);
-		}
-		else {
-			//is editable
-		}
-		break;
-	}
-	default:
-		break;
-	}
-}
-
-void System::addPoint(int x, int y)
-{
-	points.push_back(
-		std::shared_ptr<Point>(new Point(x,y))
-	);
-}
-
-void System::addLine(const Point & p1, const Point & p2)
-{
-	lines.push_back(
-		std::shared_ptr<Line>(new Line(p1, p2))
-	);
-}
-
-void System::addBezier()
-{
-	beziers.push_back(
-		std::shared_ptr<Bezier>(new Bezier(point_stack))
-	);
-}
-
-void System::addMyPolygon()
-{
-	polygons.push_back(
-		std::shared_ptr<MyPolygon>(new MyPolygon(point_stack))
-	);
-}
-
-void System::addCircle(const Point & p1, const Point & p2)
-{
-	std::tuple<Point,int> ret = caculateCirclePos(p1, p2);
-	circles.push_back(
-		std::shared_ptr<Circle>(new Circle(std::get<0>(ret), std::get<1>(ret)))
-	);
-}
-
-void System::addEllipise(const Point & p1, const Point & p2)
-{
-	int centre_x = (p1.getX() + p2.getX()) / 2;
-	int centre_y = (p1.getY() + p2.getY()) / 2;
-	int r_x = abs(centre_x - p1.getX());
-	int r_y = abs(centre_y - p1.getY());
-	Point centre(centre_x, centre_y);
-	ellipises.push_back(
-		std::shared_ptr<Ellipise>(new Ellipise(centre, r_x, r_y))
-	);
+	shapesManager->up(x, y, isEditable);
 }
 
 void System::setInputType(InputType inputType)
 {
 	this->inputType = inputType;
+
+	shapesManager->clearPointStack();
+	isEditable = false;
+
+	switch (inputType) {
+	case LINE: 
+		shapesManager = &linesManager;
+		break;
+	case BEZIER: 
+		shapesManager = &beziersManager;
+		break;
+	case POLYGON: 
+		polygonsManager.setFill(false);
+		shapesManager = &polygonsManager;
+		break;
+	case CIRCLE: 
+		shapesManager = &circlesManager;
+		break;
+	case ELLIPISE: 
+		shapesManager = &ellipisesManager;
+		break;
+	case POLYGON_FILL:
+		polygonsManager.setFill(true);
+		shapesManager = &polygonsManager;
+		break;
+	default:
+		break;
+	}
 }
 
 System::InputType System::getInputType() const
@@ -335,6 +71,7 @@ void System::setWindowSize(int width, int height)
 {
 	windowWidth = width;
 	windowHeight = height;
+	shapesManager->setWindowSize(width, height);
 }
 
 void System::setMousePos(int x, int y)
@@ -350,13 +87,20 @@ void System::setIsEditable(bool isEditable)
 
 std::string System::getInputTypeString() {
 	switch (inputType) {
-	case LINE: return "LINE";
-	case BEZIER: return "BEZIER";
-	case POLYGON: return "POLYGON";
-	case CIRCLE: return "CIRCLE";
-	case ELLIPISE: return "ELLIPISE";
-	case FILL: return "FILL";
-	default: assert(0);
+	case LINE: 
+		return "LINE";
+	case BEZIER: 
+		return "BEZIER";
+	case POLYGON: 
+		return "POLYGON";
+	case CIRCLE: 
+		return "CIRCLE";
+	case ELLIPISE: 
+		return "ELLIPISE";
+	case POLYGON_FILL:
+		return "POLYGON_FILL";
+	default: 
+		assert(0);
 	}
 }
 
@@ -367,27 +111,12 @@ void System::setDrawPointFunc(PDrawPointFunc pDrawPointFunc) {
 
 void System::moveFocusPointTo(int x, int y)
 {
-	assert(focus_point != nullptr);
+	if (!focus_point)
+		return;
 	focus_point->set(x, y);
 }
 
 void System::clearPointStack()
 {
-	point_stack.clear();
-}
-
-std::tuple<Point, int> System::caculateCirclePos(const Point & start, const Point & end)
-{
-	int delta_x = end.getX() - start.getX();
-	int delta_y = end.getY() - start.getY();
-	if (abs(delta_x) > abs(delta_y)) {
-		int dy = delta_y / 2;
-		int dx = delta_x > 0 ? abs(dy) : -abs(dy);
-		return std::make_tuple(Point(start.getX() + dx, start.getY() + dy), abs(dy));
-	}
-	else {
-		int offset = delta_y > 0 ? delta_x / 2 : -delta_x / 2;
-		int offset2 = delta_x > 0 ? offset : -offset;
-		return std::make_tuple(Point(start.getX() + delta_x / 2, start.getY() + offset2), abs(delta_x / 2));
-	}
+	shapesManager->clearPointStack();
 }

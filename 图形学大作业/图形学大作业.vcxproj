@@ -143,28 +143,41 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Bezier.cpp" />
+    <ClCompile Include="BeziersManager.cpp" />
     <ClCompile Include="Circle.cpp" />
+    <ClCompile Include="CirclesManager.cpp" />
     <ClCompile Include="Ellipise.cpp" />
+    <ClCompile Include="EllipisesManager.cpp" />
     <ClCompile Include="Line.cpp" />
+    <ClCompile Include="LinesManager.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Point.cpp" />
     <ClCompile Include="MyPolygon.cpp" />
+    <ClCompile Include="PolygonManager.cpp" />
     <ClCompile Include="Shape.cpp" />
+    <ClCompile Include="ShapesManager.cpp" />
     <ClCompile Include="System.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Bezier.h" />
+    <ClInclude Include="BeziersManager.h" />
     <ClInclude Include="Circle.h" />
+    <ClInclude Include="CirclesManager.h" />
     <ClInclude Include="Ellipise.h" />
+    <ClInclude Include="EllipisesManager.h" />
     <ClInclude Include="Line.h" />
+    <ClInclude Include="LinesManager.h" />
     <ClInclude Include="Point.h" />
     <ClInclude Include="MyPolygon.h" />
+    <ClInclude Include="PolygonsManager.h" />
     <ClInclude Include="Shape.h" />
+    <ClInclude Include="ShapesManager.h" />
     <ClInclude Include="System.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />
     <None Include="ClassDiagram1.cd" />
+    <None Include="ClassDiagram2.cd" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

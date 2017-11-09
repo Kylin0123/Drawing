@@ -81,6 +81,7 @@ void onMontion(int x, int y) {
 
 	if (system_instance.getIsEditable() == true)
 		system_instance.moveFocusPointTo(x, y);
+
 	glutPostRedisplay();
 }
 
@@ -120,9 +121,10 @@ void mainMenu(int id) {
 		system_instance.setInputType(System::InputType::ELLIPISE);
 		break;
 	case 6:
-		system_instance.setInputType(System::InputType::FILL);
+		system_instance.setInputType(System::InputType::POLYGON_FILL);
 		break;
 	default:
+		assert(0);
 		break;
 	}
 }
@@ -144,16 +146,16 @@ int main(int argc, char** argv) {
 	glutMotionFunc(onMontion);
 	glutPassiveMotionFunc(onPassiveMontion);
 	glutKeyboardFunc(onKeyboard);
-
-	glutCreateMenu(mainMenu);
-	glutAddMenuEntry("直线", 1);
-	glutAddMenuEntry("曲线", 2);
-	glutAddMenuEntry("多边形", 3);
-	glutAddMenuEntry("圆", 4);
-	glutAddMenuEntry("椭圆", 5);
-	glutAddMenuEntry("填充区域", 6);
-	glutAttachMenu(GLUT_RIGHT_BUTTON);
-
+	{
+		glutCreateMenu(mainMenu);
+		glutAddMenuEntry("直线", 1);
+		glutAddMenuEntry("曲线", 2);
+		glutAddMenuEntry("多边形", 3);
+		glutAddMenuEntry("圆", 4);
+		glutAddMenuEntry("椭圆", 5);
+		glutAddMenuEntry("多边形(填充)", 6);
+		glutAttachMenu(GLUT_RIGHT_BUTTON);
+	}
 	init();
 	glutMainLoop();
 	return 0;

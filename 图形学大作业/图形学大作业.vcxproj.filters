@@ -42,6 +42,24 @@
     <ClCompile Include="Ellipise.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="LinesManager.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="BeziersManager.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="PolygonManager.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="CirclesManager.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="EllipisesManager.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="ShapesManager.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="System.h">
@@ -68,9 +86,28 @@
     <ClInclude Include="Ellipise.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="LinesManager.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="BeziersManager.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="PolygonsManager.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CirclesManager.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="EllipisesManager.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="ShapesManager.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />
     <None Include="ClassDiagram1.cd" />
+    <None Include="ClassDiagram2.cd" />
   </ItemGroup>
 </Project>

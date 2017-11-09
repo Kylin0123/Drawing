@@ -1,4 +1,7 @@
 #pragma once
+#include <vector>
+#include <memory>
+#include <cassert>
 #include "Shape.h"
 #include "Point.h"
 #include "Line.h"
@@ -6,9 +9,12 @@
 #include "MyPolygon.h"
 #include "Circle.h"
 #include "Ellipise.h"
-#include <vector>
-#include <memory>
-#include <cassert>
+#include "LinesManager.h"
+#include "BeziersManager.h"
+#include "PolygonsManager.h"
+#include "CirclesManager.h"
+#include "EllipisesManager.h"
+#include "ShapesManager.h"
 
 class System
 {
@@ -18,13 +24,8 @@ public:
 	void draw();
 	void down(int x, int y);
 	void up(int x, int y);
-	void addPoint(int x, int y);
-	void addLine(const Point & p1, const Point & p2);
-	void addBezier();
-	void addMyPolygon();
-	void addCircle(const Point & p1, const Point & p2);
-	void addEllipise(const Point & p1, const Point & p2);
-	enum InputType { LINE, BEZIER, POLYGON, CIRCLE, ELLIPISE, FILL };
+	enum InputType { LINE, BEZIER, POLYGON, CIRCLE, ELLIPISE, POLYGON_FILL
+	};
 	void setInputType(InputType inputType);
 	InputType getInputType() const;
 	void setWindowSize(int width, int height);
@@ -41,20 +42,19 @@ public:
 	void setDrawPointFunc(PDrawPointFunc pDrawPointFunc);
 	void moveFocusPointTo(int x, int y);
 	void clearPointStack();
-	const int bezierNum;
-protected:
-	std::tuple<Point, int> caculateCirclePos(const Point & start, const Point & end);
 private:
-	std::vector<std::shared_ptr<Point> > points;
-	std::vector<std::shared_ptr<Line> > lines;
-	std::vector<std::shared_ptr<Bezier> > beziers;
-	std::vector<std::shared_ptr<MyPolygon> > polygons;
-	std::vector<std::shared_ptr<Circle> > circles;
-	std::vector<std::shared_ptr<Ellipise> > ellipises;
+	LinesManager linesManager;
+	BeziersManager beziersManager;
+	PolygonsManager polygonsManager;
+	CirclesManager circlesManager;
+	EllipisesManager ellipisesManager;
+	
 	InputType inputType;
 	PDrawPointFunc pDrawPointFunc;
-	std::vector<Point> point_stack;
+	
 	Point* focus_point;
+	ShapesManager* shapesManager;
+
 	int windowWidth, windowHeight;
 	int mouseX, mouseY;
 	bool isEditable;
