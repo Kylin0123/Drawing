@@ -1,5 +1,5 @@
 #include "LinesManager.h"
-
+#include <cmath>
 
 
 LinesManager::LinesManager()
@@ -69,4 +69,42 @@ void LinesManager::up(int x, int y, bool & isEditable)
 	else {
 		//is editable
 	}
+}
+
+void LinesManager::translate(int x, int y, bool isEditable)
+{
+	if (!isEditable) return;
+	assert(point_stack.size() == 2);
+	int m[3][3] = { { 1,0,x },{ 0,1,y },{ 0,0,1 } };
+	Matrix<int> matrix((int*)m, 3, 3);
+	point_stack[0].change(matrix);
+	point_stack[1].change(matrix);
+}
+
+void LinesManager::rotate(float angle, bool isEditable)
+{
+	if (!isEditable) return;
+	assert(point_stack.size() == 2);
+	float m[3][3] = { 
+		{cos(angle), -sin(angle), 0},
+		{sin(angle), cos(angle), 0},
+		{0, 0, 1}
+	};
+	Matrix<float> matrix((float*)m, 3, 3);
+	point_stack[0].change(matrix);
+	point_stack[1].change(matrix);
+}
+
+void LinesManager::scale(float s1, float s2, bool isEditable)
+{
+	if (!isEditable) return;
+	assert(point_stack.size() == 2);
+	float m[3][3] = {
+		{ s1, 0, 0 },
+		{ 0, s2, 0 },
+		{ 0, 0, 1 }
+	};
+	Matrix<float> matrix((float*)m, 3, 3);
+	point_stack[0].change(matrix);
+	point_stack[1].change(matrix);
 }

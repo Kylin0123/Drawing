@@ -15,7 +15,14 @@ void Point::draw() const
 	pDrawPointFunc(x, y);
 }
 
-#include <iostream>
+/*void Point::change(const Matrix<int> &m)
+{
+	int vec[3][1] = { x, y, 1 };
+	Matrix<int> m1((int*)vec, 3, 1);
+	Matrix<int> ret = m * m1;
+	x = ret.get(0, 0);
+	y = ret.get(1, 0);
+}*/
 
 void Point::strongDraw() const
 {

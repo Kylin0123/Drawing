@@ -85,7 +85,26 @@ void System::setIsEditable(bool isEditable)
 	this->isEditable = isEditable;
 }
 
-std::string System::getInputTypeString() {
+void System::translate(int x, int y)
+{
+	shapesManager->translate(x, y, isEditable);
+}
+
+void System::rotate(float angle)
+{
+	translate(-mouseX, -mouseY);
+	shapesManager->rotate(angle, isEditable);
+	translate(mouseX, mouseY);
+}
+
+void System::scale(float s1, float s2)
+{
+	translate(-mouseX, -mouseY);
+	shapesManager->scale(s1, s2, isEditable);
+	translate(mouseX, mouseY);
+}
+
+std::string System::getInputTypeString() const {
 	switch (inputType) {
 	case LINE: 
 		return "LINE";

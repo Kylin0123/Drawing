@@ -91,16 +91,43 @@ void onPassiveMontion(int x, int y) {
 	glutPostRedisplay();
 }
 
+#include <iostream>
+
 void onKeyboard(unsigned char key, int x, int y) {
 	switch(key) {
 	case 127: //`delete` key
 		system_instance.clearPointStack();
 		system_instance.setIsEditable(false);
-		glutPostRedisplay();
+		break;
+	case 'w':
+		system_instance.translate(0, 3);
+		break;
+	case 'a':
+		system_instance.translate(-3, 0);
+		break;
+	case 's':
+		system_instance.translate(0, -3);
+		break;
+	case 'd':
+		system_instance.translate(3, 0);
+		break;
+	case 'e':
+		system_instance.rotate(-0.05f);
+		break;
+	case 'q':
+		system_instance.rotate(0.05f);
+		break;
+	case '+':
+		system_instance.scale(1.1f,1.1f);
+		break;
+	case '-':
+		system_instance.scale(0.9f, 0.9f);
 		break;
 	default:
 		break;
 	}
+	std::cout << (int)key << ":" << key << std::endl;
+	glutPostRedisplay();
 }
 
 void mainMenu(int id) {
@@ -131,6 +158,7 @@ void mainMenu(int id) {
 
 void init() {
 	glClearColor(1.0f, 1.0f, 1.0f, 0.0f);
+	glClear(GL_COLOR_BUFFER_BIT);
 	system_instance.setDrawPointFunc(glVertex2i);
 }
 

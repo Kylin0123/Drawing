@@ -1,6 +1,6 @@
 #pragma once
-#include<Windows.h>
-#include<GL/glut.h>
+#include <Windows.h>
+#include <GL/glut.h>
 
 class Shape
 {
