@@ -101,16 +101,14 @@
     <ClInclude Include="EllipisesManager.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="ShapesManager.h">
+    <ClInclude Include="Matrix.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Matrix.h">
+    <ClInclude Include="ShapesManager.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />
-    <None Include="ClassDiagram1.cd" />
-    <None Include="ClassDiagram2.cd" />
   </ItemGroup>
 </Project>

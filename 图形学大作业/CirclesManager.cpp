@@ -77,6 +77,48 @@ void CirclesManager::up(int x, int y, bool & isEditable)
 	}
 }
 
+void CirclesManager::translate(int x, int y, bool isEditable)
+{
+	if (!isEditable) return;
+	assert(point_stack.size() == 2);
+	int m[3][3] = { { 1,0,x },{ 0,1,y },{ 0,0,1 } };
+	Matrix<int> matrix((int*)m, 3, 3);
+	for (int i = 0; i < point_stack.size(); i++) {
+		point_stack[i].change(matrix);
+	}
+}
+
+void CirclesManager::rotate(float angle, bool isEditable)
+{
+	//TODO: wrong rotation
+	if (!isEditable) return;
+	assert(point_stack.size() == 2);
+	float m[3][3] = {
+		{ cos(angle), -sin(angle), 0 },
+		{ sin(angle), cos(angle), 0 },
+		{ 0, 0, 1 }
+	};
+	Matrix<float> matrix((float*)m, 3, 3);
+	for (int i = 0; i < point_stack.size(); i++) {
+		point_stack[i].change(matrix);
+	}
+}
+
+void CirclesManager::scale(float s1, float s2, bool isEditable)
+{
+	if (!isEditable) return;
+	assert(point_stack.size() == 2);
+	float m[3][3] = {
+		{ s1, 0, 0 },
+		{ 0, s2, 0 },
+		{ 0, 0, 1 }
+	};
+	Matrix<float> matrix((float*)m, 3, 3);
+	for (int i = 0; i < point_stack.size(); i++) {
+		point_stack[i].change(matrix);
+	}
+}
+
 std::tuple<Point, int> CirclesManager::caculateCirclePos(const Point & start, const Point & end) const
 {
 	int delta_x = end.getX() - start.getX();

@@ -35,9 +35,9 @@ void onDisplay() {
 
 	glRasterPos2i(0, system_instance.getWindowSizeY() - 15);  //ÆðÊ¼Î»ÖÃ 
 
-	drawString(std::string("state:") 
+	drawString(std::string("state:")
 		+ system_instance.getStateString() + "    "
-		+ std::string("inputType:") 
+		+ std::string("inputType:")
 		+ system_instance.getInputTypeString() + "    "
 		+ std::string("mousePos:")
 		+ std::to_string(system_instance.getMouseX()) + ','
@@ -75,7 +75,7 @@ void onMouse(int button, int state, int x, int y) {
 	glutPostRedisplay();
 }
 
-void onMontion(int x, int y) {
+void onMotion(int x, int y) {
 	y = system_instance.getWindowSizeY() - y;
 	system_instance.setMousePos(x, y); 
 
@@ -100,16 +100,16 @@ void onKeyboard(unsigned char key, int x, int y) {
 		system_instance.setIsEditable(false);
 		break;
 	case 'w':
-		system_instance.translate(0, 3);
+		system_instance.translate(0, 5);
 		break;
 	case 'a':
-		system_instance.translate(-3, 0);
+		system_instance.translate(-5, 0);
 		break;
 	case 's':
-		system_instance.translate(0, -3);
+		system_instance.translate(0, -5);
 		break;
 	case 'd':
-		system_instance.translate(3, 0);
+		system_instance.translate(5, 0);
 		break;
 	case 'e':
 		system_instance.rotate(-0.05f);
@@ -171,7 +171,7 @@ int main(int argc, char** argv) {
 	glutDisplayFunc(onDisplay);
 	glutReshapeFunc(onChangeSize);
 	glutMouseFunc(onMouse);
-	glutMotionFunc(onMontion);
+	glutMotionFunc(onMotion);
 	glutPassiveMotionFunc(onPassiveMontion);
 	glutKeyboardFunc(onKeyboard);
 	{

@@ -12,6 +12,20 @@ PolygonsManager::~PolygonsManager()
 {
 }
 
+void PolygonsManager::add(bool isFill)
+{
+	polygons.push_back(
+		std::shared_ptr<MyPolygon>(new MyPolygon(point_stack))
+	);
+	if (isFill)
+		polygons.back()->fill(windowHeight);
+}
+
+void PolygonsManager::setFill(bool isFill)
+{
+	this->isFill = isFill;
+}
+
 void PolygonsManager::drawAll(int mouseX, int mouseY, bool isEditable) const
 {
 	for (std::shared_ptr<MyPolygon> p : polygons) {
@@ -35,15 +49,6 @@ void PolygonsManager::drawAll(int mouseX, int mouseY, bool isEditable) const
 		}
 		Line(point_stack.back(), Point(mouseX, mouseY)).draw();
 	}
-}
-
-void PolygonsManager::add(bool isFill)
-{
-	polygons.push_back(
-		std::shared_ptr<MyPolygon>(new MyPolygon(point_stack))
-	);
-	if(isFill)
-		polygons.back()->fill(windowHeight);
 }
 
 void PolygonsManager::down(int x, int y, bool & isEditable, Point *& focus_point)
@@ -79,7 +84,44 @@ void PolygonsManager::up(int x, int y, bool & isEditable)
 {
 }
 
-void PolygonsManager::setFill(bool isFill)
+void PolygonsManager::translate(int x, int y, bool isEditable)
 {
-	this->isFill = isFill;
+	if (!isEditable) return;
+	assert(point_stack.size() >= 3);
+	int m[3][3] = { { 1,0,x },{ 0,1,y },{ 0,0,1 } };
+	Matrix<int> matrix((int*)m, 3, 3);
+	for (int i = 0; i < point_stack.size(); i++) {
+		point_stack[i].change(matrix);
+	}
 }
+
+void PolygonsManager::rotate(float angle, bool isEditable)
+{
+	if (!isEditable) return;
+	assert(point_stack.size() >= 3);
+	float m[3][3] = {
+		{ cos(angle), -sin(angle), 0 },
+		{ sin(angle), cos(angle), 0 },
+		{ 0, 0, 1 }
+	};
+	Matrix<float> matrix((float*)m, 3, 3);
+	for (int i = 0; i < point_stack.size(); i++) {
+		point_stack[i].change(matrix);
+	}
+}
+
+void PolygonsManager::scale(float s1, float s2, bool isEditable)
+{
+	if (!isEditable) return;
+	assert(point_stack.size() >= 3);
+	float m[3][3] = {
+		{ s1, 0, 0 },
+		{ 0, s2, 0 },
+		{ 0, 0, 1 }
+	};
+	Matrix<float> matrix((float*)m, 3, 3);
+	for (int i = 0; i < point_stack.size(); i++) {
+		point_stack[i].change(matrix);
+	}
+}
+

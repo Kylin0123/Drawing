@@ -2,19 +2,12 @@
 #include <vector>
 #include <memory>
 #include <cassert>
-#include "Shape.h"
-#include "Point.h"
-#include "Line.h"
-#include "Bezier.h"
-#include "MyPolygon.h"
-#include "Circle.h"
-#include "Ellipise.h"
+#include "ShapesManager.h"
 #include "LinesManager.h"
 #include "BeziersManager.h"
 #include "PolygonsManager.h"
 #include "CirclesManager.h"
 #include "EllipisesManager.h"
-#include "ShapesManager.h"
 
 class System
 {
