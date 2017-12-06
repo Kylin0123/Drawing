@@ -3,6 +3,7 @@
 System::System():
 	inputType(LINE), isEditable(false), shapesManager(&linesManager)
 {
+	ShapesManager::setSystem(this);
 }
 
 
@@ -12,21 +13,21 @@ System::~System()
 
 void System::draw()
 {
-	linesManager.drawAll(mouseX, mouseY, isEditable);
-	beziersManager.drawAll(mouseX, mouseY, isEditable);
-	polygonsManager.drawAll(mouseX, mouseY, isEditable);
-	circlesManager.drawAll(mouseX, mouseY, isEditable);
-	ellipisesManager.drawAll(mouseX, mouseY, isEditable);
+	linesManager.drawAll(mouseX, mouseY);
+	beziersManager.drawAll(mouseX, mouseY);
+	polygonsManager.drawAll(mouseX, mouseY);
+	circlesManager.drawAll(mouseX, mouseY);
+	ellipisesManager.drawAll(mouseX, mouseY);
 }
 
 void System::down(int x, int y)
 {
-	shapesManager->down(x, y, isEditable, focus_point);
+	shapesManager->down(x, y, focus_point);
 }
 
 void System::up(int x, int y)
 {
-	shapesManager->up(x, y, isEditable);
+	shapesManager->up(x, y);
 }
 
 void System::setInputType(InputType inputType)
@@ -52,10 +53,6 @@ void System::setInputType(InputType inputType)
 		break;
 	case ELLIPISE: 
 		shapesManager = &ellipisesManager;
-		break;
-	case POLYGON_FILL:
-		polygonsManager.setFill(true);
-		shapesManager = &polygonsManager;
 		break;
 	default:
 		break;
@@ -87,21 +84,35 @@ void System::setIsEditable(bool isEditable)
 
 void System::translate(int x, int y)
 {
-	shapesManager->translate(x, y, isEditable);
+	shapesManager->translate(x, y);
 }
 
 void System::rotate(float angle)
 {
 	translate(-mouseX, -mouseY);
-	shapesManager->rotate(angle, isEditable);
+	shapesManager->rotate(angle);
 	translate(mouseX, mouseY);
 }
 
 void System::scale(float s1, float s2)
 {
 	translate(-mouseX, -mouseY);
-	shapesManager->scale(s1, s2, isEditable);
+	shapesManager->scale(s1, s2);
 	translate(mouseX, mouseY);
+}
+
+void System::fillOrNot()
+{
+	shapesManager->fillOrNot();
+}
+
+void System::cut(int x1, int y1, int x2, int y2)
+{
+	shapesManager->cut(x1, y1, x2, y2);
+}
+
+std::string System::getStateString() const { 
+	return isEditable ? "editable" : "drawing"; 
 }
 
 std::string System::getInputTypeString() const {
@@ -116,10 +127,9 @@ std::string System::getInputTypeString() const {
 		return "CIRCLE";
 	case ELLIPISE: 
 		return "ELLIPISE";
-	case POLYGON_FILL:
-		return "POLYGON_FILL";
 	default: 
 		assert(0);
+		return nullptr;
 	}
 }
 

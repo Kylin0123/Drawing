@@ -1,5 +1,5 @@
 #include "EllipisesManager.h"
-
+#include "System.h"
 
 
 EllipisesManager::EllipisesManager()
@@ -11,7 +11,7 @@ EllipisesManager::~EllipisesManager()
 {
 }
 
-void EllipisesManager::drawAll(int mouseX, int mouseY, bool isEditable) const
+void EllipisesManager::drawAll(int mouseX, int mouseY) const
 {
 	for (std::shared_ptr<Ellipise> e : ellipises) {
 		e->draw();
@@ -19,7 +19,7 @@ void EllipisesManager::drawAll(int mouseX, int mouseY, bool isEditable) const
 
 	if (point_stack.size() < 1) return;
 
-	if (isEditable) {
+	if (mySystem->getIsEditable()) {
 		assert(point_stack.size() == 2);
 		const Point & p1 = point_stack[0];
 		const Point & p2 = point_stack[1];
@@ -56,9 +56,9 @@ void EllipisesManager::add(const Point & p1, const Point & p2)
 	);
 }
 
-void EllipisesManager::down(int x, int y, bool & isEditable, Point *& focus_point)
+void EllipisesManager::down(int x, int y, Point *& focus_point)
 {
-	if (!isEditable) {
+	if (!mySystem->getIsEditable()) {
 		assert(point_stack.size() == 0);
 		point_stack.push_back(Point(x, y));
 	}
@@ -75,39 +75,39 @@ void EllipisesManager::down(int x, int y, bool & isEditable, Point *& focus_poin
 		else {
 			add(start, end);
 			point_stack.clear();
-			isEditable = false;
+			mySystem->setIsEditable(false);
 		}
 	}
 }
 
-void EllipisesManager::up(int x, int y, bool & isEditable)
+void EllipisesManager::up(int x, int y)
 {
 	if (point_stack.empty()) return;
-	if (!isEditable) {
+	if (!mySystem->getIsEditable()) {
 		point_stack.push_back(Point(x, y));
 		assert(point_stack.size() == 2);
-		isEditable = true;
+		mySystem->setIsEditable(true);
 	}
 	else {
 		//is editable
 	}
 }
 
-void EllipisesManager::translate(int x, int y, bool isEditable)
+void EllipisesManager::translate(int x, int y)
 {
-	if (!isEditable) return;
+	if (!mySystem->getIsEditable()) return;
 	assert(point_stack.size() == 2);
 	int m[3][3] = { { 1,0,x },{ 0,1,y },{ 0,0,1 } };
 	Matrix<int> matrix((int*)m, 3, 3);
-	for (int i = 0; i < point_stack.size(); i++) {
+	for (size_t i = 0; i < point_stack.size(); i++) {
 		point_stack[i].change(matrix);
 	}
 }
 
-void EllipisesManager::rotate(float angle, bool isEditable)
+void EllipisesManager::rotate(float angle)
 {
 	//TODO: wrong rotation
-	if (!isEditable) return;
+	if (!mySystem->getIsEditable()) return;
 	assert(point_stack.size() == 2);
 	float m[3][3] = {
 		{ cos(angle), -sin(angle), 0 },
@@ -115,14 +115,14 @@ void EllipisesManager::rotate(float angle, bool isEditable)
 		{ 0, 0, 1 }
 	};
 	Matrix<float> matrix((float*)m, 3, 3);
-	for (int i = 0; i < point_stack.size(); i++) {
+	for (size_t i = 0; i < point_stack.size(); i++) {
 		point_stack[i].change(matrix);
 	}
 }
 
-void EllipisesManager::scale(float s1, float s2, bool isEditable)
+void EllipisesManager::scale(float s1, float s2)
 {
-	if (!isEditable) return;
+	if (!mySystem->getIsEditable()) return;
 	assert(point_stack.size() == 2);
 	float m[3][3] = {
 		{ s1, 0, 0 },
@@ -130,7 +130,7 @@ void EllipisesManager::scale(float s1, float s2, bool isEditable)
 		{ 0, 0, 1 }
 	};
 	Matrix<float> matrix((float*)m, 3, 3);
-	for (int i = 0; i < point_stack.size(); i++) {
+	for (size_t i = 0; i < point_stack.size(); i++) {
 		point_stack[i].change(matrix);
 	}
 }

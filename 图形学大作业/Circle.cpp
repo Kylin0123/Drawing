@@ -34,6 +34,30 @@ void Circle::draw() const
 	}
 }
 
+void Circle::strongDraw() const
+{
+	draw();
+	glEnd();
+	glLineStipple(2, 0x5555);
+	glEnable(GL_LINE_STIPPLE);
+	glBegin(GL_LINES);
+	glVertex2i(centre.getX() - radius, centre.getY() - radius);
+	glVertex2i(centre.getX() - radius, centre.getY() + radius);
+	glVertex2i(centre.getX() - radius, centre.getY() + radius);
+	glVertex2i(centre.getX() + radius, centre.getY() + radius);
+	glVertex2i(centre.getX() + radius, centre.getY() + radius);
+	glVertex2i(centre.getX() + radius, centre.getY() - radius);
+	glVertex2i(centre.getX() + radius, centre.getY() - radius);
+	glVertex2i(centre.getX() - radius, centre.getY() - radius);
+	glEnd();
+	glDisable(GL_LINE_STIPPLE);
+	glBegin(GL_POINTS);
+	//Point(centre.getX() - radius, centre.getY() - radius).strongDraw();
+	//Point(centre.getX() - radius, centre.getY() + radius).strongDraw();
+	//Point(centre.getX() + radius, centre.getY() - radius).strongDraw();
+	//Point(centre.getX() + radius, centre.getY() + radius).strongDraw();
+}
+
 void Circle::draw8points(int cur_x, int cur_y) const
 {
 	pDrawPointFunc(centre.getX() - cur_x, centre.getY() - cur_y);

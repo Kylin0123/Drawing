@@ -4,8 +4,6 @@
 
 System system_instance;
 
-
-
 /*show string on the screen*/
 void drawString(std::string str){
 	static const int MAX_CHAR = 128;
@@ -91,8 +89,6 @@ void onPassiveMontion(int x, int y) {
 	glutPostRedisplay();
 }
 
-#include <iostream>
-
 void onKeyboard(unsigned char key, int x, int y) {
 	switch(key) {
 	case 127: //`delete` key
@@ -112,10 +108,10 @@ void onKeyboard(unsigned char key, int x, int y) {
 		system_instance.translate(5, 0);
 		break;
 	case 'e':
-		system_instance.rotate(-0.05f);
+		system_instance.rotate(- 3.14 / 2);
 		break;
 	case 'q':
-		system_instance.rotate(0.05f);
+		system_instance.rotate(3.14 / 2);
 		break;
 	case '+':
 		system_instance.scale(1.1f,1.1f);
@@ -123,10 +119,15 @@ void onKeyboard(unsigned char key, int x, int y) {
 	case '-':
 		system_instance.scale(0.9f, 0.9f);
 		break;
+	case 'f':
+		system_instance.fillOrNot();
+		break;
+	case 'c':
+		system_instance.cut(100, 100, 200, 200);
+		break;
 	default:
 		break;
 	}
-	std::cout << (int)key << ":" << key << std::endl;
 	glutPostRedisplay();
 }
 
@@ -148,7 +149,7 @@ void mainMenu(int id) {
 		system_instance.setInputType(System::InputType::ELLIPISE);
 		break;
 	case 6:
-		system_instance.setInputType(System::InputType::POLYGON_FILL);
+		system_instance.setInputType(System::InputType::CUT);
 		break;
 	default:
 		assert(0);
@@ -181,7 +182,6 @@ int main(int argc, char** argv) {
 		glutAddMenuEntry("¶à±ßÐÎ", 3);
 		glutAddMenuEntry("Ô²", 4);
 		glutAddMenuEntry("ÍÖÔ²", 5);
-		glutAddMenuEntry("¶à±ßÐÎ(Ìî³ä)", 6);
 		glutAttachMenu(GLUT_RIGHT_BUTTON);
 	}
 	init();

@@ -19,7 +19,7 @@ void MyPolygon::draw() const
 {
 	/*TODO: please implement the algorithm of drawing polygons*/
 	Point p1 = points[0];
-	int i;
+	size_t i;
 	for (i = 1; i < points.size(); i++) {
 		Point p2 = points[i];
 		Line line = Line(p1, p2);

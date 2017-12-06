@@ -9,17 +9,17 @@ public:
 	Point(int x, int y);
 	~Point();
 	virtual void draw() const override;
-	
+	virtual void strongDraw() const override;
+
 	template<typename T>
 	void change(const Matrix<T> &m) {
-		T v[3][1] = { x, y, 1 };
+		T v[3][1] = { (T)x, (T)y, (T)1 };
 		Matrix<T> vec((T*)v, 3, 1);
 		Matrix<T> ret = m * vec;
 		x = std::round(ret.get(0, 0));
 		y = std::round(ret.get(1, 0));
 	}
 
-	void strongDraw() const;
 	bool nearBy(int x, int y);
 	int getX() const { return x; }
 	int getY() const { return y; }

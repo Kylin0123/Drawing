@@ -26,14 +26,19 @@ void Point::draw() const
 
 void Point::strongDraw() const
 {
-	for (int i = 1; i <= 4; i++) {
+	/*for (int i = 1; i <= 4; i++) {
 		pDrawPointFunc(x - i, y - i);
 		pDrawPointFunc(x - i, y + i);
 		pDrawPointFunc(x + i, y - i);
 		pDrawPointFunc(x + i, y + i);
 	}
-	pDrawPointFunc(x, y);
-	
+	pDrawPointFunc(x, y);*/
+	for (int i = -5; i <= 5; i++) {
+		pDrawPointFunc(x + i, y - 5);
+		pDrawPointFunc(x + i, y + 5);
+		pDrawPointFunc(x - 5, y + i);
+		pDrawPointFunc(x + 5, y + i);
+	}
 }
 
 bool Point::nearBy(int x, int y)

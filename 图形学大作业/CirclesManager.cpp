@@ -1,5 +1,5 @@
 #include "CirclesManager.h"
-
+#include "System.h"
 
 
 CirclesManager::CirclesManager()
@@ -11,7 +11,7 @@ CirclesManager::~CirclesManager()
 {
 }
 
-void CirclesManager::drawAll(int mouseX, int mouseY, bool isEditable) const
+void CirclesManager::drawAll(int mouseX, int mouseY) const
 {
 	for (std::shared_ptr<Circle> c : circles) {
 		c->draw();
@@ -19,14 +19,16 @@ void CirclesManager::drawAll(int mouseX, int mouseY, bool isEditable) const
 
 	if (point_stack.size() < 1) return;
 
-	if (isEditable) {
+	if (mySystem->getIsEditable()) {
 		assert(point_stack.size() == 2);
 		std::tuple<Point, int> ret = caculateCirclePos(point_stack[0], point_stack[1]);
-		Circle(std::get<0>(ret), std::get<1>(ret)).draw();
+		Point centre = std::get<0>(ret);
+		int radis = std::get<1>(ret);
+		Circle(centre, radis).strongDraw();
+		
 		point_stack[0].strongDraw();
 		point_stack[1].strongDraw();
-	}
-	else {
+	} else {
 		std::tuple<Point, int> ret = caculateCirclePos(point_stack[0], Point(mouseX, mouseY));
 		Circle(std::get<0>(ret), std::get<1>(ret)).draw();
 	}
@@ -40,58 +42,54 @@ void CirclesManager::add(const Point & p1, const Point & p2)
 	);
 }
 
-void CirclesManager::down(int x, int y, bool & isEditable, Point *& focus_point)
+void CirclesManager::down(int x, int y, Point *& focus_point)
 {
-	if (!isEditable) {
+	if (!mySystem->getIsEditable()) {
 		assert(point_stack.size() == 0);
 		point_stack.push_back(Point(x, y));
-	}
-	else {
+	} else {
 		assert(point_stack.size() == 2);
 		Point & start = point_stack[0];
 		Point & end = point_stack[1];
 		if (start.nearBy(x, y)) {
 			focus_point = &start;
-		}
-		else if (end.nearBy(x, y)) {
+		} else if (end.nearBy(x, y)) {
 			focus_point = &end;
-		}
-		else {
+		} else {
 			add(start, end);
 			point_stack.clear();
-			isEditable = false;
+			mySystem->setIsEditable(false);
 		}
 	}
 }
 
-void CirclesManager::up(int x, int y, bool & isEditable)
+void CirclesManager::up(int x, int y)
 {
 	if (point_stack.empty()) return;
-	if (!isEditable) {
+	if (!mySystem->getIsEditable()) {
 		point_stack.push_back(Point(x, y));
 		assert(point_stack.size() == 2);
-		isEditable = true;
-	}
-	else {
+		mySystem->setIsEditable(true);
+	} else {
 		//is editable
 	}
 }
 
-void CirclesManager::translate(int x, int y, bool isEditable)
+void CirclesManager::translate(int x, int y)
 {
-	if (!isEditable) return;
+	if (!mySystem->getIsEditable()) return;
 	assert(point_stack.size() == 2);
 	int m[3][3] = { { 1,0,x },{ 0,1,y },{ 0,0,1 } };
 	Matrix<int> matrix((int*)m, 3, 3);
-	for (int i = 0; i < point_stack.size(); i++) {
+	for (size_t i = 0; i < point_stack.size(); i++) {
 		point_stack[i].change(matrix);
 	}
 }
 
-void CirclesManager::rotate(float angle, bool isEditable)
+void CirclesManager::rotate(float angle)
 {
 	//TODO: wrong rotation
-	if (!isEditable) return;
+	if (!mySystem->getIsEditable()) return;
 	assert(point_stack.size() == 2);
 	float m[3][3] = {
 		{ cos(angle), -sin(angle), 0 },
@@ -99,14 +97,14 @@ void CirclesManager::rotate(float angle, bool isEditable)
 		{ 0, 0, 1 }
 	};
 	Matrix<float> matrix((float*)m, 3, 3);
-	for (int i = 0; i < point_stack.size(); i++) {
+	for (size_t i = 0; i < point_stack.size(); i++) {
 		point_stack[i].change(matrix);
 	}
 }
 
-void CirclesManager::scale(float s1, float s2, bool isEditable)
+void CirclesManager::scale(float s1, float s2)
 {
-	if (!isEditable) return;
+	if (!mySystem->getIsEditable()) return;
 	assert(point_stack.size() == 2);
 	float m[3][3] = {
 		{ s1, 0, 0 },
@@ -114,7 +112,7 @@ void CirclesManager::scale(float s1, float s2, bool isEditable)
 		{ 0, 0, 1 }
 	};
 	Matrix<float> matrix((float*)m, 3, 3);
-	for (int i = 0; i < point_stack.size(); i++) {
+	for (size_t i = 0; i < point_stack.size(); i++) {
 		point_stack[i].change(matrix);
 	}
 }

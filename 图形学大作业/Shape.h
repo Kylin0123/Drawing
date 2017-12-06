@@ -8,4 +8,5 @@ public:
 	typedef void(WINAPI *PDrawPointFunc)(GLint, GLint);
 	static PDrawPointFunc pDrawPointFunc;
 	virtual void draw() const = 0;
+	virtual void strongDraw() const {}
 };
