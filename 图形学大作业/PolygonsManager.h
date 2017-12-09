@@ -15,6 +15,7 @@ public:
 	~PolygonsManager();
 	void add(bool isFill);
 	void setFill(bool isFill);
+	bool getIsFill() { return isFill; }
 	virtual void drawAll(int mouseX, int mouseY) const override;
 	virtual void down(int x, int y, Point* & focus_point) override;
 	virtual void up(int x, int y) override;
@@ -22,6 +23,8 @@ public:
 	virtual void rotate(float angle) override;
 	virtual void scale(float s1, float s2) override;
 	virtual void fillOrNot() override;
+	void refill();
+	virtual void cut(int xmin, int ymin, int xmax, int ymax) override;
 private:
 	std::vector<std::shared_ptr<MyPolygon> > polygons;
 	bool isFill;

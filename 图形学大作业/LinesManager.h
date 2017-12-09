@@ -19,7 +19,7 @@ public:
 	virtual void translate(int x, int y) override;
 	virtual void rotate(float angle) override;
 	virtual void scale(float s1, float s2) override;
-	virtual void cut(int x1, int y1, int x2, int y2) override;
+	virtual void cut(int xmin, int ymin, int xmax, int ymax) override;
 private:
 	std::vector<std::shared_ptr<Line> > lines;
 };

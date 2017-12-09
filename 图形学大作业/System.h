@@ -8,6 +8,7 @@
 #include "PolygonsManager.h"
 #include "CirclesManager.h"
 #include "EllipisesManager.h"
+#include "CutRect.h"
 
 class System
 {
@@ -18,7 +19,9 @@ public:
 	void down(int x, int y);
 	void up(int x, int y);
 	void fillOrNot();
-	void cut(int x1, int y1, int x2, int y2);
+	void cutOrNot();
+	void cut();
+	void doCut(int xmin, int ymin, int xmax, int ymax);
 
 	/*transform*/
 	void translate(int x, int y);
@@ -26,7 +29,7 @@ public:
 	void scale(float s1, float s2);
 
 	/*built-in types*/
-	enum InputType { LINE, BEZIER, POLYGON, CIRCLE, ELLIPISE, CUT };
+	enum InputType { LINE, BEZIER, POLYGON, CIRCLE, ELLIPISE };
 	typedef void(WINAPI *PDrawPointFunc)(GLint, GLint);
 	
 	/*setter*/
@@ -35,6 +38,7 @@ public:
 	void setMousePos(int x, int y);
 	void setIsEditable(bool isEditable);
 	void setDrawPointFunc(PDrawPointFunc pDrawPointFunc);
+	void setIsCut(bool isCut);
 
 	/*getter*/
 	InputType getInputType() const;
@@ -43,6 +47,7 @@ public:
 	int getWindowSizeX() const { return windowWidth; }
 	int getWindowSizeY() const { return windowHeight; }
 	bool getIsEditable() const { return isEditable; }
+	bool getIsCut() const { return isCut; }
 	std::string getStateString() const;
 	std::string getInputTypeString() const;
 	
@@ -64,5 +69,7 @@ private:
 	int windowWidth, windowHeight;
 	int mouseX, mouseY;
 	bool isEditable;
+	bool isCut;
+public:
+	CutRect cutRect;
 };
-

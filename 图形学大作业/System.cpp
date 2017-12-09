@@ -1,7 +1,10 @@
 #include "System.h"
 
 System::System():
-	inputType(LINE), isEditable(false), shapesManager(&linesManager)
+	inputType(LINE),
+	isEditable(false), 
+	shapesManager(&linesManager),
+	cutRect(100,100,200,200)
 {
 	ShapesManager::setSystem(this);
 }
@@ -18,15 +21,26 @@ void System::draw()
 	polygonsManager.drawAll(mouseX, mouseY);
 	circlesManager.drawAll(mouseX, mouseY);
 	ellipisesManager.drawAll(mouseX, mouseY);
+	if (isCut) {
+		cutRect.draw();
+	}
 }
 
 void System::down(int x, int y)
 {
-	shapesManager->down(x, y, focus_point);
+	if (isCut) {
+		focus_point = cutRect.nearBy(x, y);
+	}
+	else{
+		shapesManager->down(x, y, focus_point);
+	}
 }
 
 void System::up(int x, int y)
 {
+	/*if (polygonsManager.getIsFill()) {
+		polygonsManager.refill();
+	}*/
 	shapesManager->up(x, y);
 }
 
@@ -45,7 +59,6 @@ void System::setInputType(InputType inputType)
 		shapesManager = &beziersManager;
 		break;
 	case POLYGON: 
-		polygonsManager.setFill(false);
 		shapesManager = &polygonsManager;
 		break;
 	case CIRCLE: 
@@ -68,7 +81,6 @@ void System::setWindowSize(int width, int height)
 {
 	windowWidth = width;
 	windowHeight = height;
-	shapesManager->setWindowSize(width, height);
 }
 
 void System::setMousePos(int x, int y)
@@ -106,9 +118,26 @@ void System::fillOrNot()
 	shapesManager->fillOrNot();
 }
 
-void System::cut(int x1, int y1, int x2, int y2)
+void System::cutOrNot()
 {
-	shapesManager->cut(x1, y1, x2, y2);
+	isCut = !isCut;
+}
+
+void System::cut()
+{
+	if (isCut) {
+		doCut(cutRect.getLeft(),
+			cutRect.getBottom(),
+			cutRect.getRight(),
+			cutRect.getTop());
+	}
+}
+
+void System::doCut(int xmin, int ymin, int xmax, int ymax)
+{
+	if (!shapesManager) 
+		return;
+	shapesManager->cut(xmin, ymin, xmax, ymax);
 }
 
 std::string System::getStateString() const { 
@@ -138,11 +167,18 @@ void System::setDrawPointFunc(PDrawPointFunc pDrawPointFunc) {
 	Shape::pDrawPointFunc = pDrawPointFunc;
 }
 
+void System::setIsCut(bool isCut)
+{
+	this->isCut = isCut;
+}
+
 void System::moveFocusPointTo(int x, int y)
 {
 	if (!focus_point)
 		return;
 	focus_point->set(x, y);
+	if (polygonsManager.getIsFill())
+		polygonsManager.refill();
 }
 
 void System::clearPointStack()

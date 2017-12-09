@@ -75,7 +75,7 @@ void onMouse(int button, int state, int x, int y) {
 
 void onMotion(int x, int y) {
 	y = system_instance.getWindowSizeY() - y;
-	system_instance.setMousePos(x, y); 
+	system_instance.setMousePos(x, y);
 
 	if (system_instance.getIsEditable() == true)
 		system_instance.moveFocusPointTo(x, y);
@@ -123,7 +123,10 @@ void onKeyboard(unsigned char key, int x, int y) {
 		system_instance.fillOrNot();
 		break;
 	case 'c':
-		system_instance.cut(100, 100, 200, 200);
+		system_instance.cutOrNot();
+		break;
+	case 'v':
+		system_instance.cut();
 		break;
 	default:
 		break;
@@ -147,9 +150,6 @@ void mainMenu(int id) {
 		break;
 	case 5:
 		system_instance.setInputType(System::InputType::ELLIPISE);
-		break;
-	case 6:
-		system_instance.setInputType(System::InputType::CUT);
 		break;
 	default:
 		assert(0);

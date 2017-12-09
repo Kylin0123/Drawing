@@ -17,7 +17,8 @@ MyPolygon::~MyPolygon()
 
 void MyPolygon::draw() const
 {
-	/*TODO: please implement the algorithm of drawing polygons*/
+	/*implement the algorithm of drawing polygons*/
+	assert(points.size() >= 3);
 	Point p1 = points[0];
 	size_t i;
 	for (i = 1; i < points.size(); i++) {
@@ -27,8 +28,51 @@ void MyPolygon::draw() const
 		p1 = p2;
 	}
 	Line(points[i - 1], points[0]).draw();
-	for (Point p : fill_points) {
+	for (const auto & p : fill_points) {
 		p.draw();
+	}
+}
+
+void MyPolygon::strongDraw() const
+{
+	draw();
+	for (const Point & p : points) {
+		p.strongDraw();
+	}
+}
+
+void MyPolygon::translate(int x, int y)
+{
+	int m[3][3] = { { 1,0,x },{ 0,1,y },{ 0,0,1 } };
+	Matrix<int> matrix((int*)m, 3, 3);
+	for (Point & p : points) {
+		p.change(matrix);
+	}
+}
+
+void MyPolygon::rotate(float angle)
+{
+	float m[3][3] = {
+		{ cos(angle), -sin(angle), 0 },
+		{ sin(angle), cos(angle), 0 },
+		{ 0, 0, 1 }
+	};
+	Matrix<float> matrix((float*)m, 3, 3);
+	for (Point & p : points) {
+		p.change(matrix);
+	}
+}
+
+void MyPolygon::scale(float s1, float s2)
+{
+	float m[3][3] = {
+		{ s1, 0, 0 },
+		{ 0, s2, 0 },
+		{ 0, 0, 1 }
+	};
+	Matrix<float> matrix((float*)m, 3, 3);
+	for (Point & p : points) {
+		p.change(matrix);
 	}
 }
 
@@ -38,6 +82,7 @@ void MyPolygon::fill(int windowHeight)
 	ET.resize(windowHeight);
 	AET.clear();
 	AET.resize(windowHeight);
+
 	int n = points.size();
 	for (int i = 0; i < n; i++) {
 		const Point & curPoint = points[i];
@@ -67,7 +112,6 @@ void MyPolygon::fill(int windowHeight)
 		}
 		else {
 			/*two neighbour points are both on the lower side*/
-
 		}
 	}
 
@@ -85,29 +129,156 @@ void MyPolygon::fill(int windowHeight)
 				AET[i].push_back(*it);
 
 		/*make sure all edges are sorted*/
-		AET[i].sort([](const Edge & e1, const Edge & e2) -> bool {
+		std::sort(AET[i].begin(), AET[i].end(),[](const Edge & e1, const Edge & e2) -> bool {
 			return e1.x < e2.x;
 		});
 	}
-	
+
 	for (int i = 0; i < windowHeight; i++) {
-		for (auto it = AET[i].begin(); it != AET[i].end(); it++, it++) {
-			for (int j = it->x; j < std::next(it)->x; j++) {
+		for (size_t it = 0; it < AET[i].size(); it += 2) {
+			for (int j = (AET[i][it]).x; j < (AET[i][it+1]).x; j++) {
 				fill_points.push_back(Point(j, i));
 			}
 		}
 	}
+}
 
+void MyPolygon::unfill()
+{
+	fill_points.erase(fill_points.begin(), fill_points.end());
+}
+
+MyPolygon MyPolygon::cut(int xmin, int ymin, int xmax, int ymax)
+{
+	/*store the result of one side's cutting*/
+	std::vector<Point> ret;
+
+	auto back = points.end() - 1;
+	for (auto it = points.begin(); it != points.end(); back = it, it++) {
+		if ((it->getX() - xmin)*(back->getX() - xmin) < 0) {
+			int y = (float)(it->getY() - back->getY()) 
+				/ (it->getX() - back->getX())
+				*(xmin - back->getX()) + back->getY();
+			if ((it->getX() - xmin) <= 0) {
+				//in - out
+				ret.push_back(Point(xmin, y));
+			}
+			else {
+				//out - in
+				ret.push_back(Point(xmin, y));
+				ret.push_back(*it);
+			}
+		}
+		else if (it->getX() - xmin >= 0 && back->getX() - xmin >= 0) {
+			ret.push_back(*it);
+		}
+		else {
+			//points in
+		}
+	}
+
+	if (ret.size() < 3)
+		throw std::exception("null");
+
+	/*ready for the other side's cutting*/
+	points = ret;
+	ret.erase(ret.begin(), ret.end());
+	back = points.end() - 1;
+	for (auto it = points.begin(); it != points.end(); back = it, it++) {
+		if ((it->getX() - xmax)*(back->getX() - xmax) < 0) {
+			int y = (float)(it->getY() - back->getY()) 
+				/ (it->getX() - back->getX())
+				*(xmax - back->getX()) + back->getY();
+			if ((it->getX() - xmax) <= 0) {
+				//out - in
+				ret.push_back(Point(xmax, y));
+				ret.push_back(*it);
+			}
+			else {
+				//in - out
+				ret.push_back(Point(xmax, y));
+			}
+		}
+		else if (it->getX() - xmax <= 0 && back->getX() - xmax <= 0) {
+			ret.push_back(*it);
+		}
+		else {
+			//points in
+		}
+	}
+
+	if (ret.size() < 3)
+		throw std::exception("null");
+
+	points = ret;
+	ret.erase(ret.begin(), ret.end());
+	back = points.end() - 1;
+	for (auto it = points.begin(); it != points.end(); back = it, it++) {
+		if ((it->getY() - ymin)*(back->getY() - ymin) < 0) {
+			int x = (float)(it->getX() - back->getX())
+				/ (it->getY() - back->getY())
+				*(ymin - back->getY()) + back->getX();
+			if ((it->getY() - ymin) <= 0) {
+				//in - out
+				ret.push_back(Point(x, ymin));
+			}
+			else {
+				//out - in
+				ret.push_back(Point(x, ymin));
+				ret.push_back(*it);
+			}
+		}
+		else if (it->getY() - ymin >= 0 && back->getY() - ymin >= 0) {
+			ret.push_back(*it);
+		}
+		else {
+			//points in
+		}
+	}
+
+	if (ret.size() < 3)
+		throw std::exception("null");
+
+	points = ret;
+	ret.erase(ret.begin(), ret.end());
+	back = points.end() - 1;
+	for (auto it = points.begin(); it != points.end(); back = it, it++) {
+		if ((it->getY() - ymax)*(back->getY() - ymax) < 0) {
+			int x = (float)(it->getX() - back->getX())
+				/ (it->getY() - back->getY())
+				*(ymax - back->getY()) + back->getX();
+			if ((it->getY() - ymax) <= 0) {
+				//out - in
+				ret.push_back(Point(x, ymax));
+				ret.push_back(*it);
+			}
+			else {
+				//in - out
+				ret.push_back(Point(x, ymax));
+			}
+		}
+		else if (it->getY() - ymax <= 0 && back->getY() - ymax <= 0) {
+			ret.push_back(*it);
+		}
+		else {
+			//points in
+		}
+	}
+
+	if (ret.size() < 3)
+		throw std::exception("null");
+
+	return MyPolygon(ret);
 }
 
 void MyPolygon::addEdge(int index, int ymax, float x, float dx)
 {
-	std::list<Edge> & list = ET[index];
+	std::vector<Edge> & list = ET[index];
 	list.push_back(Edge(ymax, x, dx));
 }
 
 void MyPolygon::addAEdge(int index, const Edge & e)
 {
-	std::list<Edge> & list = AET[index];
+	std::vector<Edge> & list = AET[index];
 	list.push_back(e);
 }

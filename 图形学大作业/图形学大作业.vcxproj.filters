@@ -60,6 +60,9 @@
     <ClCompile Include="ShapesManager.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="CutRect.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="System.h">
@@ -105,6 +108,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="ShapesManager.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CutRect.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

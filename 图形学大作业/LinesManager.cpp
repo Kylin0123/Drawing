@@ -115,10 +115,10 @@ void LinesManager::scale(float s1, float s2)
 	point_stack[1].change(matrix);
 }
 
-void LinesManager::cut(int x1, int y1, int x2, int y2)
+void LinesManager::cut(int xmin, int ymin, int xmax, int ymax)
 {
-	assert(mySystem->getIsEditable() == true);
-	assert(point_stack.size() == 2);
+	if(mySystem->getIsEditable() != true) return;
+	if(point_stack.size() != 2) return;
 	
 	Point p1 = point_stack[0];
 	Point p2 = point_stack[1];
@@ -131,10 +131,10 @@ void LinesManager::cut(int x1, int y1, int x2, int y2)
 	p[3] = p1.getY() - p2.getY();
 	p[4] = p2.getY() - p1.getY();
 
-	q[1] = p1.getX() - x1;
-	q[2] = x2 - p1.getX();
-	q[3] = p1.getY() - y1;
-	q[4] = y2 - p1.getY();
+	q[1] = p1.getX() - xmin;
+	q[2] = xmax - p1.getX();
+	q[3] = p1.getY() - ymin;
+	q[4] = ymax - p1.getY();
 
 	for (int i = 1; i <= 4; i++) {
 		float r = (float)q[i] / p[i];

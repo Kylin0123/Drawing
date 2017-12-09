@@ -17,14 +17,11 @@ public:
 	virtual void translate(int x, int y) = 0;
 	virtual void rotate(float angle) = 0;
 	virtual void scale(float s1, float s2) = 0;
-	virtual void fillOrNot();
-	virtual void cut(int x1, int y1, int x2, int y2);
-	static void setWindowSize(int windowWidth, int windowHeight);
+	virtual void fillOrNot() { assert(0); }
+	virtual void cut(int xmin, int ymin, int xmax, int ymax) { assert(0); }
 	static void setSystem(System* system);
 protected:
 	std::vector<Point> point_stack;
-	static int windowWidth;
-	static int windowHeight;
 	static System* mySystem;
 };
 

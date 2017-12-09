@@ -70,3 +70,35 @@ void Line::draw() const
 		}
 	}
 }
+
+bool isLegal(float val) {
+	return val >= -1 && val <= 1;
+}
+
+bool Line::getCrossPoint(const Line & line, Point & ret)
+{
+	int x1 = start.getX();
+	int y1 = start.getY();
+	int x2 = end.getX();
+	int y2 = end.getY();
+
+	int x3 = line.getStart().getX();
+	int y3 = line.getStart().getY();
+	int x4 = line.getEnd().getX();
+	int y4 = line.getEnd().getY();
+
+	if ((x2 - x1)*(y3 - y4) - (y2 - y1)*(x3 - x4) == 0)
+		return false;
+
+	float u1 = (float)((x3 - x1)*(y3 - y4) - (y3 - y1)*(x3 - x4)) / ((x2 - x1)*(y3 - y4) - (y2 - y1)*(x3 - x4));
+	float u2 = (float)((x2 - x1)*(y3 - y1) - (y2 - y1)*(x3 - x1)) / ((x2 - x1)*(y3 - y4) - (y2 - y1)*(x3 - x4));
+
+	std::cout << u1 << "," << u2 << std::endl;
+
+	if (isLegal(u1) && isLegal(u2)) {
+		ret = Point(x1 + u1*(x2 - x1), y1 + u1*(y2 - y1));
+		return true;
+	}
+
+	return false;
+}
