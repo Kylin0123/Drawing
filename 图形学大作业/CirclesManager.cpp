@@ -13,24 +13,27 @@ CirclesManager::~CirclesManager()
 
 void CirclesManager::drawAll(int mouseX, int mouseY) const
 {
-	for (std::shared_ptr<Circle> c : circles) {
-		c->draw();
+	if (mySystem->getInputType() == System::InputType::CIRCLE
+		&& mySystem->getIsEditable()) {
+		//is editable
+		assert(point_stack.size() == 0);
+		if (circles.size() <= 0) return;
+
+		for (std::vector<std::shared_ptr<Circle>>::const_iterator
+			cit = circles.begin(); cit != circles.end() - 1; cit++) {
+			(*cit)->draw();
+		}
+
+		std::shared_ptr<Circle> circle = circles.back();
+		circle->strongDraw();
 	}
-
-	if (point_stack.size() < 1) return;
-
-	if (mySystem->getIsEditable()) {
-		assert(point_stack.size() == 2);
-		std::tuple<Point, int> ret = caculateCirclePos(point_stack[0], point_stack[1]);
-		Point centre = std::get<0>(ret);
-		int radis = std::get<1>(ret);
-		Circle(centre, radis).strongDraw();
-		
-		point_stack[0].strongDraw();
-		point_stack[1].strongDraw();
-	} else {
+	else {
+		for (std::shared_ptr<Circle> c : circles) {
+			c->draw();
+		}
+		if (point_stack.size() != 1) return;
 		std::tuple<Point, int> ret = caculateCirclePos(point_stack[0], Point(mouseX, mouseY));
-		Circle(std::get<0>(ret), std::get<1>(ret)).draw();
+		Circle(std::get<0>(ret), std::get<1>(ret)).strongDraw();
 	}
 }
 
@@ -42,22 +45,32 @@ void CirclesManager::add(const Point & p1, const Point & p2)
 	);
 }
 
-void CirclesManager::down(int x, int y, Point *& focus_point)
+void CirclesManager::clearCurrent()
+{
+	if (!circles.empty()) {
+		circles.pop_back();
+	}
+}
+
+void CirclesManager::down(int x, int y)
 {
 	if (!mySystem->getIsEditable()) {
 		assert(point_stack.size() == 0);
 		point_stack.push_back(Point(x, y));
-	} else {
-		assert(point_stack.size() == 2);
-		Point & start = point_stack[0];
-		Point & end = point_stack[1];
-		if (start.nearBy(x, y)) {
-			focus_point = &start;
-		} else if (end.nearBy(x, y)) {
-			focus_point = &end;
-		} else {
-			add(start, end);
-			point_stack.clear();
+	} 
+	else {
+		//is editable
+		assert(point_stack.size() == 0);
+		if (circles.size() <= 0) {
+			mySystem->setIsEditable(false);
+			return;
+		}
+		std::shared_ptr<Circle> circle = circles.back();
+
+		if (circle->nearBy(x, y)) {
+
+		}
+		else {
 			mySystem->setIsEditable(false);
 		}
 	}
@@ -69,52 +82,47 @@ void CirclesManager::up(int x, int y)
 	if (!mySystem->getIsEditable()) {
 		point_stack.push_back(Point(x, y));
 		assert(point_stack.size() == 2);
+		Point & start = point_stack[0];
+		Point & end = point_stack[1];
+		add(start, end);
+		point_stack.clear();
 		mySystem->setIsEditable(true);
-	} else {
+	} 
+	else {
 		//is editable
 	}
+}
+
+void CirclesManager::moveFocusPointTo(int x, int y)
+{
+	if (!mySystem->getIsEditable()) return;
+	if (circles.size() <= 0) return;
+	std::shared_ptr<Circle> circle = circles.back();
+	circle->moveFocusPointTo(x, y);
 }
 
 void CirclesManager::translate(int x, int y)
 {
 	if (!mySystem->getIsEditable()) return;
-	assert(point_stack.size() == 2);
-	int m[3][3] = { { 1,0,x },{ 0,1,y },{ 0,0,1 } };
-	Matrix<int> matrix((int*)m, 3, 3);
-	for (size_t i = 0; i < point_stack.size(); i++) {
-		point_stack[i].change(matrix);
-	}
+	if (circles.size() <= 0) return;
+	assert(point_stack.size() == 0);
+	circles.back()->translate(x, y);
 }
 
 void CirclesManager::rotate(float angle)
 {
-	//TODO: wrong rotation
 	if (!mySystem->getIsEditable()) return;
-	assert(point_stack.size() == 2);
-	float m[3][3] = {
-		{ cos(angle), -sin(angle), 0 },
-		{ sin(angle), cos(angle), 0 },
-		{ 0, 0, 1 }
-	};
-	Matrix<float> matrix((float*)m, 3, 3);
-	for (size_t i = 0; i < point_stack.size(); i++) {
-		point_stack[i].change(matrix);
-	}
+	if (circles.size() <= 0) return;
+	assert(point_stack.size() == 0);
+	circles.back()->rotate(angle);
 }
 
 void CirclesManager::scale(float s1, float s2)
 {
 	if (!mySystem->getIsEditable()) return;
-	assert(point_stack.size() == 2);
-	float m[3][3] = {
-		{ s1, 0, 0 },
-		{ 0, s2, 0 },
-		{ 0, 0, 1 }
-	};
-	Matrix<float> matrix((float*)m, 3, 3);
-	for (size_t i = 0; i < point_stack.size(); i++) {
-		point_stack[i].change(matrix);
-	}
+	if (circles.size() <= 0) return;
+	assert(point_stack.size() == 0);
+	circles.back()->scale(s1, s2);
 }
 
 std::tuple<Point, int> CirclesManager::caculateCirclePos(const Point & start, const Point & end) const

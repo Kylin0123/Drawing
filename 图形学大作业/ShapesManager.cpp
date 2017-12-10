@@ -1,8 +1,7 @@
 #include "ShapesManager.h"
 #include <cassert>
+#include "System.h"
 
-//int ShapesManager::windowHeight = 0;
-//int ShapesManager::windowWidth = 0;
 System* ShapesManager::mySystem = nullptr;
 
 ShapesManager::ShapesManager()

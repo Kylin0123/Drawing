@@ -60,7 +60,13 @@
     <ClCompile Include="ShapesManager.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="CutRect.cpp">
+    <ClCompile Include="Rect.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Cutable.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="CutWin.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
@@ -110,7 +116,13 @@
     <ClInclude Include="ShapesManager.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="CutRect.h">
+    <ClInclude Include="Rect.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Cutable.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CutWin.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

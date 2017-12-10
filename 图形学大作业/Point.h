@@ -10,6 +10,10 @@ public:
 	~Point();
 	virtual void draw() const override;
 	virtual void strongDraw() const override;
+	virtual void moveFocusPointTo(int x, int y) override;
+	virtual void translate(int x, int y) override;
+	virtual void rotate(float angle) override;
+	virtual void scale(float s1, float s2) override;
 
 	template<typename T>
 	void change(const Matrix<T> &m) {
@@ -20,12 +24,14 @@ public:
 		y = std::round(ret.get(1, 0));
 	}
 
-	bool nearBy(int x, int y);
+	void set(int x, int y);
+	void setX(int x);
+	void setY(int y);
+
+	bool nearBy(int x, int y) const;
 	int getX() const { return x; }
 	int getY() const { return y; }
-	void set(int x, int y) { this->x = x; this->y = y; }
-	void setX(int x) { this->x = x; }
-	void setY(int y) { this->y = y; }
+	
 private:
 	int x, y;
 };

@@ -19,7 +19,7 @@ void Line::setEnd(const Point & end)
 
 void Line::draw() const
 {
-	/*TODO:please implement the algorithm of drawing lines*/
+	/*implement the algorithm of drawing lines*/
 	int delta_x = end.getX() - start.getX();
 	int delta_y = end.getY() - start.getY();
 	int abs_delta_x = abs(delta_x);
@@ -71,34 +71,104 @@ void Line::draw() const
 	}
 }
 
-bool isLegal(float val) {
-	return val >= -1 && val <= 1;
+void Line::strongDraw() const
+{
+	draw();
+	start.strongDraw();
+	end.strongDraw();
 }
 
-bool Line::getCrossPoint(const Line & line, Point & ret)
+void Line::moveFocusPointTo(int x, int y)
 {
-	int x1 = start.getX();
-	int y1 = start.getY();
-	int x2 = end.getX();
-	int y2 = end.getY();
+	focus_point->set(x, y);
+}
 
-	int x3 = line.getStart().getX();
-	int y3 = line.getStart().getY();
-	int x4 = line.getEnd().getX();
-	int y4 = line.getEnd().getY();
+void Line::translate(int x, int y)
+{
+	start.translate(x, y);
+	end.translate(x, y);
+}
 
-	if ((x2 - x1)*(y3 - y4) - (y2 - y1)*(x3 - x4) == 0)
-		return false;
+void Line::rotate(float angle)
+{
+	int midX = (start.getX() + end.getX()) / 2;
+	int midY = (start.getY() + end.getY()) / 2;
+	start.translate(-midX, -midY);
+	start.rotate(angle);
+	start.translate(midX, midY);
+	end.translate(-midX, -midY);
+	end.rotate(angle); 
+	end.translate(midX, midY);
+}
 
-	float u1 = (float)((x3 - x1)*(y3 - y4) - (y3 - y1)*(x3 - x4)) / ((x2 - x1)*(y3 - y4) - (y2 - y1)*(x3 - x4));
-	float u2 = (float)((x2 - x1)*(y3 - y1) - (y2 - y1)*(x3 - x1)) / ((x2 - x1)*(y3 - y4) - (y2 - y1)*(x3 - x4));
+void Line::scale(float s1, float s2)
+{
+	int midX = (start.getX() + end.getX()) / 2;
+	int midY = (start.getY() + end.getY()) / 2;
+	start.translate(-midX, -midY);
+	start.scale(s1, s2);
+	start.translate(midX, midY);
+	end.translate(-midX, -midY);
+	end.scale(s1, s2);
+	end.translate(midX, midY);
+}
 
-	std::cout << u1 << "," << u2 << std::endl;
+bool Line::cut(int xmin, int ymin, int xmax, int ymax)
+{
+	Point p1 = start;
+	Point p2 = end;
 
-	if (isLegal(u1) && isLegal(u2)) {
-		ret = Point(x1 + u1*(x2 - x1), y1 + u1*(y2 - y1));
-		return true;
+	int p[5], q[5];
+	float u1 = 0, u2 = 1;
+	bool flag = false;
+	p[1] = p1.getX() - p2.getX();
+	p[2] = p2.getX() - p1.getX();
+	p[3] = p1.getY() - p2.getY();
+	p[4] = p2.getY() - p1.getY();
+
+	q[1] = p1.getX() - xmin;
+	q[2] = xmax - p1.getX();
+	q[3] = p1.getY() - ymin;
+	q[4] = ymax - p1.getY();
+
+	for (int i = 1; i <= 4; i++) {
+		float r = (float)q[i] / p[i];
+		if (p[i] < 0) {
+			u1 = max(u1, r);
+			if (u1 > u2) {
+				flag = true;
+			}
+		}
+		else if (p[i] > 0) {
+			u2 = min(u2, r);
+			if (u1 > u2) {
+				flag = true;
+			}
+		}
+		else if (p[i] == 0 && q[i] < 0) {
+			flag = true;
+		}
 	}
 
+	if (flag) {
+		return false;
+	}
+
+	start = Point(p1.getX() + (int)(u1 * (p2.getX() - p1.getX())),
+		p1.getY() + (int)(u1 * (p2.getY() - p1.getY())));
+	end = Point(p1.getX() + (int)(u2 * (p2.getX() - p1.getX())),
+		p1.getY() + (int)(u2 * (p2.getY() - p1.getY())));
+}
+
+bool Line::nearBy(int x, int y)
+{
+	if (start.nearBy(x, y)) {
+		focus_point = &start;
+		return true;
+	}
+	else if (end.nearBy(x, y)) {
+		focus_point = &end;
+		return true;
+	}
 	return false;
 }

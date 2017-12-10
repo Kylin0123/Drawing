@@ -147,6 +147,8 @@
     <ClCompile Include="BeziersManager.cpp" />
     <ClCompile Include="Circle.cpp" />
     <ClCompile Include="CirclesManager.cpp" />
+    <ClCompile Include="Cutable.cpp" />
+    <ClCompile Include="CutWin.cpp" />
     <ClCompile Include="Ellipise.cpp" />
     <ClCompile Include="EllipisesManager.cpp" />
     <ClCompile Include="Line.cpp" />
@@ -155,7 +157,7 @@
     <ClCompile Include="Point.cpp" />
     <ClCompile Include="MyPolygon.cpp" />
     <ClCompile Include="PolygonManager.cpp" />
-    <ClCompile Include="CutRect.cpp" />
+    <ClCompile Include="Rect.cpp" />
     <ClCompile Include="Shape.cpp" />
     <ClCompile Include="ShapesManager.cpp" />
     <ClCompile Include="System.cpp" />
@@ -165,6 +167,8 @@
     <ClInclude Include="BeziersManager.h" />
     <ClInclude Include="Circle.h" />
     <ClInclude Include="CirclesManager.h" />
+    <ClInclude Include="Cutable.h" />
+    <ClInclude Include="CutWin.h" />
     <ClInclude Include="Ellipise.h" />
     <ClInclude Include="EllipisesManager.h" />
     <ClInclude Include="Line.h" />
@@ -173,7 +177,7 @@
     <ClInclude Include="Point.h" />
     <ClInclude Include="MyPolygon.h" />
     <ClInclude Include="PolygonsManager.h" />
-    <ClInclude Include="CutRect.h" />
+    <ClInclude Include="Rect.h" />
     <ClInclude Include="Shape.h" />
     <ClInclude Include="ShapesManager.h" />
     <ClInclude Include="System.h" />

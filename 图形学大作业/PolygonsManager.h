@@ -16,9 +16,11 @@ public:
 	void add(bool isFill);
 	void setFill(bool isFill);
 	bool getIsFill() { return isFill; }
+	virtual void clearCurrent() override;
 	virtual void drawAll(int mouseX, int mouseY) const override;
-	virtual void down(int x, int y, Point* & focus_point) override;
+	virtual void down(int x, int y) override;
 	virtual void up(int x, int y) override;
+	virtual void moveFocusPointTo(int x, int y) override;
 	virtual void translate(int x, int y) override;
 	virtual void rotate(float angle) override;
 	virtual void scale(float s1, float s2) override;

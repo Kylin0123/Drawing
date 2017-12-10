@@ -92,8 +92,7 @@ void onPassiveMontion(int x, int y) {
 void onKeyboard(unsigned char key, int x, int y) {
 	switch(key) {
 	case 127: //`delete` key
-		system_instance.clearPointStack();
-		system_instance.setIsEditable(false);
+		system_instance.clearCurrent();
 		break;
 	case 'w':
 		system_instance.translate(0, 5);

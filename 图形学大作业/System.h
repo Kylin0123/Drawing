@@ -8,7 +8,8 @@
 #include "PolygonsManager.h"
 #include "CirclesManager.h"
 #include "EllipisesManager.h"
-#include "CutRect.h"
+#include "Rect.h"
+#include "CutWin.h"
 
 class System
 {
@@ -47,11 +48,12 @@ public:
 	int getWindowSizeX() const { return windowWidth; }
 	int getWindowSizeY() const { return windowHeight; }
 	bool getIsEditable() const { return isEditable; }
-	bool getIsCut() const { return isCut; }
+	bool getIsCut() const { return cutWin.getIsCut(); }
 	std::string getStateString() const;
 	std::string getInputTypeString() const;
 	
 	void moveFocusPointTo(int x, int y);
+	void clearCurrent();
 	void clearPointStack();
 private:
 	LinesManager linesManager;
@@ -60,16 +62,15 @@ private:
 	CirclesManager circlesManager;
 	EllipisesManager ellipisesManager;
 	
+	CutWin cutWin;
+
 	InputType inputType;
 	PDrawPointFunc pDrawPointFunc;
 	
-	Point* focus_point;
 	ShapesManager* shapesManager;
 
 	int windowWidth, windowHeight;
 	int mouseX, mouseY;
 	bool isEditable;
-	bool isCut;
-public:
-	CutRect cutRect;
+	bool isDragable;
 };

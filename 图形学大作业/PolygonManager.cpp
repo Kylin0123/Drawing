@@ -18,12 +18,19 @@ void PolygonsManager::add(bool isFill)
 		std::shared_ptr<MyPolygon>(new MyPolygon(point_stack))
 	);
 	if (isFill)
-		polygons.back()->fill(mySystem->getWindowSizeY());
+		polygons.back()->fill();
 }
 
 void PolygonsManager::setFill(bool isFill)
 {
 	this->isFill = isFill;
+}
+
+void PolygonsManager::clearCurrent()
+{
+	if (!polygons.empty()) {
+		polygons.pop_back();
+	}
 }
 
 void PolygonsManager::drawAll(int mouseX, int mouseY) const
@@ -34,8 +41,9 @@ void PolygonsManager::drawAll(int mouseX, int mouseY) const
 		assert(point_stack.size() == 0);
 		if (polygons.size() <= 0) return;
 		
-		for (std::vector<std::shared_ptr<MyPolygon>>::const_iterator p = polygons.begin(); p != polygons.end() - 1; p++) {
-			(*p)->draw();
+		for (std::vector<std::shared_ptr<MyPolygon>>::const_iterator
+			cit = polygons.begin(); cit != polygons.end() - 1; cit++) {
+			(*cit)->draw();
 		}
 		/*多边形数组中最后一个多边形是当前指向的多边形*/
 		std::shared_ptr<MyPolygon> myPolygon = polygons.back();
@@ -53,7 +61,7 @@ void PolygonsManager::drawAll(int mouseX, int mouseY) const
 	}
 }
 
-void PolygonsManager::down(int x, int y, Point *& focus_point)
+void PolygonsManager::down(int x, int y)
 {
 	if (!mySystem->getIsEditable()) {
 		static DWORD last_time = 0;
@@ -79,24 +87,28 @@ void PolygonsManager::down(int x, int y, Point *& focus_point)
 			mySystem->setIsEditable(false);
 			return; 
 		}
-		bool flag = false;
 		std::shared_ptr<MyPolygon> myPolygon = polygons.back();
-		for (Point & p : myPolygon->getPointVector()) {
-			if (p.nearBy(x, y)) {
-				focus_point = &p;
-				flag = true;
-			}
+
+		if (myPolygon->nearBy(x, y)) {
+
 		}
-		if (!flag) {
+		else {
 			mySystem->setIsEditable(false);
 			isFill = false;
-			point_stack.clear();
 		}
 	}
 }
 
 void PolygonsManager::up(int x, int y)
 {
+}
+
+void PolygonsManager::moveFocusPointTo(int x, int y)
+{
+	if (!mySystem->getIsEditable()) return;
+	if (polygons.size() <= 0) return;
+	std::shared_ptr<MyPolygon> polygon = polygons.back();
+	polygon->moveFocusPointTo(x, y);
 }
 
 void PolygonsManager::translate(int x, int y)
@@ -128,7 +140,7 @@ void PolygonsManager::fillOrNot()
 	isFill = !isFill;
 	std::shared_ptr<MyPolygon> myPolygon = polygons.back();
 	if (isFill)
-		myPolygon->fill(mySystem->getWindowSizeY());
+		myPolygon->fill();
 	else
 		myPolygon->unfill();
 }
@@ -136,21 +148,13 @@ void PolygonsManager::fillOrNot()
 void PolygonsManager::refill()
 {
 	std::shared_ptr<MyPolygon> myPolygon = polygons.back();
-	myPolygon->unfill();
-	myPolygon->fill(mySystem->getWindowSizeY());
+	myPolygon->refill();
 }
 
 void PolygonsManager::cut(int xmin, int ymin, int xmax, int ymax)
 {
 	if (polygons.size() <= 0) return;
-	std::shared_ptr<MyPolygon> myPolygon = polygons.back();
-	try {
-		MyPolygon ret = myPolygon->cut(xmin, ymin, xmax, ymax);
-		polygons.back() = std::shared_ptr<MyPolygon>(new MyPolygon(ret));
-	}
-	catch (std::exception e) {
+	if(!polygons.back()->cut(xmin, ymin, xmax, ymax))
 		polygons.pop_back();
-	}
-
 }
 

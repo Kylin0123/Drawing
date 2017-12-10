@@ -18,19 +18,66 @@ void BeziersManager::add()
 	);
 }
 
-void BeziersManager::drawAll(int mouseX, int mouseY) const
+void BeziersManager::clearCurrent()
 {
-	for (std::shared_ptr<Bezier> b : beziers) {
-		b->draw();
+	if (!beziers.empty()) {
+		beziers.pop_back();
 	}
 }
 
-void BeziersManager::down(int x, int y, Point *& focus_point)
+void BeziersManager::drawAll(int mouseX, int mouseY) const
 {
-	point_stack.push_back(Point(x, y));
-	if (point_stack.size() == bezierNum) {
-		add();
-		point_stack.clear();
+	if (mySystem->getInputType() == System::InputType::BEZIER
+		&& mySystem->getIsEditable()) {
+
+		assert(point_stack.size() == 0);
+		if (beziers.size() <= 0) return;
+
+		for (std::vector<std::shared_ptr<Bezier>>::const_iterator
+			cit = beziers.begin(); cit != beziers.end() - 1; cit++) {
+			(*cit)->draw();
+		}
+
+		std::shared_ptr<Bezier> bezier = beziers.back();
+		bezier->strongDraw();
+
+	}
+	else {
+		for (std::shared_ptr<Bezier> b : beziers) {
+			b->draw();
+		}
+		if (point_stack.size() < 1) return;
+
+		for (const Point & p : point_stack) {
+			p.strongDraw();
+		}
+	}
+}
+
+void BeziersManager::down(int x, int y)
+{
+	if(!mySystem->getIsEditable()) {
+		point_stack.push_back(Point(x, y));
+		if (point_stack.size() == bezierNum) {
+			add();
+			mySystem->setIsEditable(true);
+			point_stack.clear();
+		}
+	}
+	else { //is editable
+		assert(point_stack.size() == 0);
+		if (beziers.size() <= 0) {
+			mySystem->setIsEditable(false);
+			return;
+		}
+		std::shared_ptr<Bezier> bezier = beziers.back();
+
+		if (bezier->nearBy(x, y)) {
+
+		}
+		else {
+			mySystem->setIsEditable(false);
+		}
 	}
 }
 
@@ -38,46 +85,34 @@ void BeziersManager::up(int x, int y)
 {
 }
 
+void BeziersManager::moveFocusPointTo(int x, int y)
+{
+	if (!mySystem->getIsEditable()) return;
+	if (beziers.size() <= 0) return;
+	std::shared_ptr<Bezier> bezier = beziers.back();
+	bezier->moveFocusPointTo(x, y);
+}
+
 void BeziersManager::translate(int x, int y)
 {
-	/*TODO:no test*/
 	if (!mySystem->getIsEditable()) return;
-	assert(point_stack.size() == bezierNum);
-	int m[3][3] = { { 1,0,x },{ 0,1,y },{ 0,0,1 } };
-	Matrix<int> matrix((int*)m, 3, 3);
-	for (size_t i = 0; i < point_stack.size(); i++) {
-		point_stack[i].change(matrix);
-	}
+	if (beziers.size() <= 0) return;
+	assert(point_stack.size() == 0);
+	beziers.back()->translate(x, y);
 }
 
 void BeziersManager::rotate(float angle)
 {
-	/*TODO:no test*/
 	if (!mySystem->getIsEditable()) return;
-	assert(point_stack.size() == bezierNum);
-	float m[3][3] = {
-		{ cos(angle), -sin(angle), 0 },
-		{ sin(angle), cos(angle), 0 },
-		{ 0, 0, 1 }
-	};
-	Matrix<float> matrix((float*)m, 3, 3);
-	for (size_t i = 0; i < point_stack.size(); i++) {
-		point_stack[i].change(matrix);
-	}
+	if (beziers.size() <= 0) return;
+	assert(point_stack.size() == 0);
+	beziers.back()->rotate(angle);
 }
 
 void BeziersManager::scale(float s1, float s2)
 {
-	/*TODO:no test*/
 	if (!mySystem->getIsEditable()) return;
-	assert(point_stack.size() == bezierNum);
-	float m[3][3] = {
-		{ s1, 0, 0 },
-		{ 0, s2, 0 },
-		{ 0, 0, 1 }
-	};
-	Matrix<float> matrix((float*)m, 3, 3);
-	for (size_t i = 0; i < point_stack.size(); i++) {
-		point_stack[i].change(matrix);
-	}
+	if (beziers.size() <= 0) return;
+	assert(point_stack.size() == 0);
+	beziers.back()->scale(s1, s2);
 }

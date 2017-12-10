@@ -2,7 +2,9 @@
 
 
 Circle::Circle(const Point & centre, int radius):
-	centre(centre), radius(radius)
+	centre(centre), radius(radius),
+	editRect(centre.getX()-radius, centre.getY()-radius,
+		centre.getX() + radius, centre.getY() + radius)
 {
 }
 
@@ -36,26 +38,96 @@ void Circle::draw() const
 
 void Circle::strongDraw() const
 {
+	centre.strongDraw();
 	draw();
-	glEnd();
-	glLineStipple(2, 0x5555);
-	glEnable(GL_LINE_STIPPLE);
-	glBegin(GL_LINES);
-	glVertex2i(centre.getX() - radius, centre.getY() - radius);
-	glVertex2i(centre.getX() - radius, centre.getY() + radius);
-	glVertex2i(centre.getX() - radius, centre.getY() + radius);
-	glVertex2i(centre.getX() + radius, centre.getY() + radius);
-	glVertex2i(centre.getX() + radius, centre.getY() + radius);
-	glVertex2i(centre.getX() + radius, centre.getY() - radius);
-	glVertex2i(centre.getX() + radius, centre.getY() - radius);
-	glVertex2i(centre.getX() - radius, centre.getY() - radius);
-	glEnd();
-	glDisable(GL_LINE_STIPPLE);
-	glBegin(GL_POINTS);
-	//Point(centre.getX() - radius, centre.getY() - radius).strongDraw();
-	//Point(centre.getX() - radius, centre.getY() + radius).strongDraw();
-	//Point(centre.getX() + radius, centre.getY() - radius).strongDraw();
-	//Point(centre.getX() + radius, centre.getY() + radius).strongDraw();
+	editRect.strongDraw();
+}
+
+void Circle::moveFocusPointTo(int x, int y)
+{
+	if (focus_point == &centre) {
+		int dx = x - centre.getX();
+		int dy = y - centre.getY();
+		centre.set(x, y);
+		editRect.translate(dx, dy);
+	}
+	else {
+		int x0 = focus_point->getX();
+		int y0 = focus_point->getY();
+		if (focus_point == editRect.get_rt()) {
+			int dx = x - x0;
+			int dy = y - y0;
+			int d = dx >= dy ? dy : dx;
+			focus_point->set(x0 + d, y0 + d);
+			editRect.get_lt()->setY(y0 + d);
+			editRect.get_rb()->setX(x0 + d);
+		}
+		else if (focus_point == editRect.get_rb()) {
+			int dx = x - x0;
+			int dy = y0 - y;
+			int d = dx >= dy ? dy : dx;
+			focus_point->set(x0 + d, y0 - d);
+			editRect.get_lb()->setY(y0 - d);
+			editRect.get_rt()->setX(x0 + d);
+		}
+		else if (focus_point == editRect.get_lt()) {
+			int dx = x0 - x;
+			int dy = y - y0;
+			int d = dx >= dy ? dy : dx;
+			focus_point->set(x0 - d, y0 + d);
+			editRect.get_rt()->setY(y0 + d);
+			editRect.get_lb()->setX(x0 - d);
+		}
+		else if (focus_point == editRect.get_lb()) {
+			int dx = x0 - x;
+			int dy = y0 - y;
+			int d = dx >= dy ? dy : dx;
+			focus_point->set(x0 - d, y0 - d);
+			editRect.get_rb()->setY(y0 - d);
+			editRect.get_lt()->setX(x0 - d);
+		}
+		else {
+			assert(0);
+		}
+		int centre_x = (editRect.getLeft() + editRect.getRight()) / 2;
+		int centre_y = (editRect.getTop() + editRect.getBottom()) / 2;
+		centre.set(centre_x, centre_y);
+		radius = centre_x - editRect.getLeft();
+	}
+}
+
+void Circle::translate(int x, int y)
+{
+	centre.translate(x, y);
+	editRect.translate(x, y);
+}
+
+void Circle::rotate(float angle)
+{
+	//nothing I can do
+}
+
+void Circle::scale(float s1, float s2)
+{
+	float min = s1 < s2 ? s1 : s2;
+	radius *= min;
+
+	editRect.setTop(centre.getY() + radius);
+	editRect.setBottom(centre.getY() - radius);
+	editRect.setLeft(centre.getX() - radius);
+	editRect.setRight(centre.getX() + radius);
+}
+
+bool Circle::nearBy(int x, int y)
+{
+	if (centre.nearBy(x, y)) {
+		focus_point = &centre;
+		return true;
+	}
+	else if (focus_point = editRect.nearBy(x, y)) {
+		return true;
+	}
+	return false;
 }
 
 void Circle::draw8points(int cur_x, int cur_y) const

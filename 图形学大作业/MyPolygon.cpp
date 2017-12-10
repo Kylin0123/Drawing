@@ -3,11 +3,15 @@
 #include <algorithm>
 #include <cassert>
 #include <iostream>
+#include <functional>
+#include <climits>
 
 
 MyPolygon::MyPolygon(const std::vector<Point> & points):
-	points(points)
+	points(points),
+	editRect(0,0,0,0)
 {
+	editRect.reshape(points);
 }
 
 
@@ -36,48 +40,67 @@ void MyPolygon::draw() const
 void MyPolygon::strongDraw() const
 {
 	draw();
+	editRect.draw();
 	for (const Point & p : points) {
 		p.strongDraw();
 	}
 }
 
+void MyPolygon::moveFocusPointTo(int x, int y)
+{
+	focus_point->set(x, y);
+	editRect.reshape(points);
+	refill();
+}
+
 void MyPolygon::translate(int x, int y)
 {
-	int m[3][3] = { { 1,0,x },{ 0,1,y },{ 0,0,1 } };
-	Matrix<int> matrix((int*)m, 3, 3);
 	for (Point & p : points) {
-		p.change(matrix);
+		p.translate(x, y);
 	}
+	editRect.reshape(points);
+	refill();
 }
 
 void MyPolygon::rotate(float angle)
 {
-	float m[3][3] = {
-		{ cos(angle), -sin(angle), 0 },
-		{ sin(angle), cos(angle), 0 },
-		{ 0, 0, 1 }
-	};
-	Matrix<float> matrix((float*)m, 3, 3);
 	for (Point & p : points) {
-		p.change(matrix);
+		p.translate(-editRect.getMidX(), -editRect.getMidY());
+		p.rotate(angle);
+		p.translate(editRect.getMidX(), editRect.getMidY());
 	}
+	editRect.reshape(points);
+	refill();
 }
 
 void MyPolygon::scale(float s1, float s2)
 {
-	float m[3][3] = {
-		{ s1, 0, 0 },
-		{ 0, s2, 0 },
-		{ 0, 0, 1 }
-	};
-	Matrix<float> matrix((float*)m, 3, 3);
 	for (Point & p : points) {
-		p.change(matrix);
+		p.translate(-editRect.getMidX(), -editRect.getMidY());
+		p.scale(s1, s2);
+		p.translate(editRect.getMidX(), editRect.getMidY());
 	}
+	editRect.reshape(points);
+	refill();
 }
 
-void MyPolygon::fill(int windowHeight)
+bool MyPolygon::nearBy(int x, int y)
 {
+	for (const Point & p : points) {
+		if (p.nearBy(x, y)) {
+			focus_point = const_cast<Point*>(&p);
+			return true;
+		}
+	}
+	return false;
+}
+
+void MyPolygon::fill()
+{
+	int windowHeight = INT_MIN;
+	for (const Point & p : points) {
+		windowHeight = max(windowHeight, p.getY());
+	}
 	ET.clear();
 	ET.resize(windowHeight);
 	AET.clear();
@@ -148,7 +171,15 @@ void MyPolygon::unfill()
 	fill_points.erase(fill_points.begin(), fill_points.end());
 }
 
-MyPolygon MyPolygon::cut(int xmin, int ymin, int xmax, int ymax)
+void MyPolygon::refill()
+{
+	if (fill_points.size() > 0) {
+		unfill();
+		fill();
+	}
+}
+
+bool MyPolygon::cut(int xmin, int ymin, int xmax, int ymax)
 {
 	/*store the result of one side's cutting*/
 	std::vector<Point> ret;
@@ -177,8 +208,7 @@ MyPolygon MyPolygon::cut(int xmin, int ymin, int xmax, int ymax)
 		}
 	}
 
-	if (ret.size() < 3)
-		throw std::exception("null");
+	if (ret.size() < 3) return false;
 
 	/*ready for the other side's cutting*/
 	points = ret;
@@ -207,8 +237,7 @@ MyPolygon MyPolygon::cut(int xmin, int ymin, int xmax, int ymax)
 		}
 	}
 
-	if (ret.size() < 3)
-		throw std::exception("null");
+	if (ret.size() < 3) return false;
 
 	points = ret;
 	ret.erase(ret.begin(), ret.end());
@@ -236,8 +265,7 @@ MyPolygon MyPolygon::cut(int xmin, int ymin, int xmax, int ymax)
 		}
 	}
 
-	if (ret.size() < 3)
-		throw std::exception("null");
+	if (ret.size() < 3) return false;
 
 	points = ret;
 	ret.erase(ret.begin(), ret.end());
@@ -265,10 +293,14 @@ MyPolygon MyPolygon::cut(int xmin, int ymin, int xmax, int ymax)
 		}
 	}
 
-	if (ret.size() < 3)
-		throw std::exception("null");
+	if (ret.size() < 3) return false;
 
-	return MyPolygon(ret);
+	points = ret;
+
+	editRect.reshape(points);
+	refill();
+
+	return true;
 }
 
 void MyPolygon::addEdge(int index, int ymax, float x, float dx)

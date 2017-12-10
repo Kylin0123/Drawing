@@ -2,9 +2,10 @@
 
 System::System():
 	inputType(LINE),
-	isEditable(false), 
+	isEditable(false),
+	isDragable(true),
 	shapesManager(&linesManager),
-	cutRect(100,100,200,200)
+	cutWin(100,100,200,200)
 {
 	ShapesManager::setSystem(this);
 }
@@ -16,32 +17,34 @@ System::~System()
 
 void System::draw()
 {
+	cutWin.draw();
 	linesManager.drawAll(mouseX, mouseY);
 	beziersManager.drawAll(mouseX, mouseY);
 	polygonsManager.drawAll(mouseX, mouseY);
 	circlesManager.drawAll(mouseX, mouseY);
 	ellipisesManager.drawAll(mouseX, mouseY);
-	if (isCut) {
-		cutRect.draw();
-	}
 }
 
 void System::down(int x, int y)
 {
-	if (isCut) {
-		focus_point = cutRect.nearBy(x, y);
+	if (cutWin.getIsCut()) {
+		if (cutWin.nearBy(x, y)) {
+
+		}
+		else {
+			cutWin.setIsCut(false);
+			isDragable = false;
+		}
 	}
 	else{
-		shapesManager->down(x, y, focus_point);
+		shapesManager->down(x, y);
 	}
 }
 
 void System::up(int x, int y)
 {
-	/*if (polygonsManager.getIsFill()) {
-		polygonsManager.refill();
-	}*/
 	shapesManager->up(x, y);
+	isDragable = true;
 }
 
 void System::setInputType(InputType inputType)
@@ -49,7 +52,7 @@ void System::setInputType(InputType inputType)
 	this->inputType = inputType;
 
 	shapesManager->clearPointStack();
-	isEditable = false;
+	setIsEditable(false);
 
 	switch (inputType) {
 	case LINE: 
@@ -101,16 +104,12 @@ void System::translate(int x, int y)
 
 void System::rotate(float angle)
 {
-	translate(-mouseX, -mouseY);
 	shapesManager->rotate(angle);
-	translate(mouseX, mouseY);
 }
 
 void System::scale(float s1, float s2)
 {
-	translate(-mouseX, -mouseY);
 	shapesManager->scale(s1, s2);
-	translate(mouseX, mouseY);
 }
 
 void System::fillOrNot()
@@ -120,16 +119,17 @@ void System::fillOrNot()
 
 void System::cutOrNot()
 {
-	isCut = !isCut;
+	if(getIsEditable())
+		cutWin.cutOrNot();
 }
 
 void System::cut()
 {
-	if (isCut) {
-		doCut(cutRect.getLeft(),
-			cutRect.getBottom(),
-			cutRect.getRight(),
-			cutRect.getTop());
+	if (cutWin.getIsCut()) {
+		doCut(cutWin.getLeft(),
+			cutWin.getBottom(),
+			cutWin.getRight(),
+			cutWin.getTop());
 	}
 }
 
@@ -169,16 +169,23 @@ void System::setDrawPointFunc(PDrawPointFunc pDrawPointFunc) {
 
 void System::setIsCut(bool isCut)
 {
-	this->isCut = isCut;
+	cutWin.setIsCut(isCut);
 }
 
 void System::moveFocusPointTo(int x, int y)
 {
-	if (!focus_point)
-		return;
-	focus_point->set(x, y);
-	if (polygonsManager.getIsFill())
-		polygonsManager.refill();
+	if (!isDragable) return;
+	if(cutWin.getIsCut())
+		cutWin.moveFocusPointTo(x, y);
+	else {
+		shapesManager->moveFocusPointTo(x, y);
+	}
+}
+
+void System::clearCurrent()
+{
+	shapesManager->clearCurrent();
+	setIsEditable(true);
 }
 
 void System::clearPointStack()
