@@ -8,8 +8,10 @@
 #include "PolygonsManager.h"
 #include "CirclesManager.h"
 #include "EllipisesManager.h"
+#include "CubesManager.h"
 #include "Rect.h"
 #include "CutWin.h"
+#include "ImageSaver.h"
 
 class System
 {
@@ -17,12 +19,14 @@ public:
 	System();
 	~System();
 	void draw();
+	void draw3D();
 	void down(int x, int y);
 	void up(int x, int y);
 	void fillOrNot();
 	void cutOrNot();
 	void cut();
 	void doCut(int xmin, int ymin, int xmax, int ymax);
+	void save(std::string filename);
 
 	/*transform*/
 	void translate(int x, int y);
@@ -61,8 +65,10 @@ private:
 	PolygonsManager polygonsManager;
 	CirclesManager circlesManager;
 	EllipisesManager ellipisesManager;
-	
+	CubesManager cubesManager;
+
 	CutWin cutWin;
+	ImageSaver imageSaver;
 
 	InputType inputType;
 	PDrawPointFunc pDrawPointFunc;
@@ -73,4 +79,5 @@ private:
 	int mouseX, mouseY;
 	bool isEditable;
 	bool isDragable;
+	bool is3D;
 };

@@ -13,6 +13,18 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="头文件\Shape">
+      <UniqueIdentifier>{f1c17ba9-0695-4e56-87d4-b6f8cb36292f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\Manager">
+      <UniqueIdentifier>{4fd327dd-211f-49c5-bbab-f7417d5e4569}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\Shape">
+      <UniqueIdentifier>{ed789d1b-3a0f-40dc-81f0-83ca07088554}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\Manager">
+      <UniqueIdentifier>{e581188d-2d23-4852-81c5-987fb2c4e793}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -21,109 +33,121 @@
     <ClCompile Include="System.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Point.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="Line.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="Bezier.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="MyPolygon.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="Shape.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="Circle.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="Ellipise.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="LinesManager.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="BeziersManager.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="PolygonManager.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="CirclesManager.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="EllipisesManager.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="ShapesManager.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="Rect.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="Cutable.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="CutWin.cpp">
       <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="ImageSaver.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Bezier.cpp">
+      <Filter>源文件\Shape</Filter>
+    </ClCompile>
+    <ClCompile Include="Circle.cpp">
+      <Filter>源文件\Shape</Filter>
+    </ClCompile>
+    <ClCompile Include="Cutable.cpp">
+      <Filter>源文件\Shape</Filter>
+    </ClCompile>
+    <ClCompile Include="Ellipise.cpp">
+      <Filter>源文件\Shape</Filter>
+    </ClCompile>
+    <ClCompile Include="Line.cpp">
+      <Filter>源文件\Shape</Filter>
+    </ClCompile>
+    <ClCompile Include="MyPolygon.cpp">
+      <Filter>源文件\Shape</Filter>
+    </ClCompile>
+    <ClCompile Include="Point.cpp">
+      <Filter>源文件\Shape</Filter>
+    </ClCompile>
+    <ClCompile Include="Shape.cpp">
+      <Filter>源文件\Shape</Filter>
+    </ClCompile>
+    <ClCompile Include="BeziersManager.cpp">
+      <Filter>源文件\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="CirclesManager.cpp">
+      <Filter>源文件\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="CubesManager.cpp">
+      <Filter>源文件\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="EllipisesManager.cpp">
+      <Filter>源文件\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="LinesManager.cpp">
+      <Filter>源文件\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="PolygonManager.cpp">
+      <Filter>源文件\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="ShapesManager.cpp">
+      <Filter>源文件\Manager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="System.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Shape.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Point.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Line.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Bezier.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="MyPolygon.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Circle.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Ellipise.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="LinesManager.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="BeziersManager.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="PolygonsManager.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="CirclesManager.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="EllipisesManager.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="Matrix.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="ShapesManager.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Rect.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Cutable.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="CutWin.h">
       <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageSaver.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Bezier.h">
+      <Filter>头文件\Shape</Filter>
+    </ClInclude>
+    <ClInclude Include="Circle.h">
+      <Filter>头文件\Shape</Filter>
+    </ClInclude>
+    <ClInclude Include="Cutable.h">
+      <Filter>头文件\Shape</Filter>
+    </ClInclude>
+    <ClInclude Include="Ellipise.h">
+      <Filter>头文件\Shape</Filter>
+    </ClInclude>
+    <ClInclude Include="Line.h">
+      <Filter>头文件\Shape</Filter>
+    </ClInclude>
+    <ClInclude Include="Point.h">
+      <Filter>头文件\Shape</Filter>
+    </ClInclude>
+    <ClInclude Include="Shape.h">
+      <Filter>头文件\Shape</Filter>
+    </ClInclude>
+    <ClInclude Include="BeziersManager.h">
+      <Filter>头文件\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="CirclesManager.h">
+      <Filter>头文件\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="CubesManager.h">
+      <Filter>头文件\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="EllipisesManager.h">
+      <Filter>头文件\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="PolygonsManager.h">
+      <Filter>头文件\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="LinesManager.h">
+      <Filter>头文件\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="ShapesManager.h">
+      <Filter>头文件\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="MyPolygon.h">
+      <Filter>头文件\Shape</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

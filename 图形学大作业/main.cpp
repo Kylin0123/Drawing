@@ -24,25 +24,74 @@ void onDisplay() {
 	glClear(GL_COLOR_BUFFER_BIT);
 	glPointSize(2.0f);
 	glColor3f(0.0, 0.0, 0.0);
+
 	glBegin(GL_POINTS);
-	
 	/*draw points*/
 	system_instance.draw();
-
 	glEnd();
 
 	glRasterPos2i(0, system_instance.getWindowSizeY() - 15);  //起始位置 
+	drawString(std::string("state:") + system_instance.getStateString());
 
-	drawString(std::string("state:")
-		+ system_instance.getStateString() + "    "
-		+ std::string("inputType:")
-		+ system_instance.getInputTypeString() + "    "
-		+ std::string("mousePos:")
+	glRasterPos2i(0, system_instance.getWindowSizeY() - 30);  //起始位置 
+	drawString(std::string("inputType:") + system_instance.getInputTypeString());
+	
+	glRasterPos2i(0, system_instance.getWindowSizeY() - 45);  //起始位置 
+	drawString(std::string("mousePos:")
 		+ std::to_string(system_instance.getMouseX()) + ','
-		+ std::to_string(system_instance.getMouseY())
-	);
+		+ std::to_string(system_instance.getMouseY()));
 
 	glutSwapBuffers();
+}
+
+static float angle = 0.0f;
+
+void onDisplay2() {
+	glEnable(GL_DEPTH_TEST);   //深度测试
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); 
+	
+	glMatrixMode(GL_PROJECTION); 
+	glLoadIdentity(); 
+	glOrtho(-30, 30, -30, 30, -50, 50);   //正交变换
+	
+	glMatrixMode(GL_MODELVIEW); 
+	glLoadIdentity(); 
+	gluLookAt(15, 12, 10, 0, 0, 0, 0, 0, 1);   //相机视角
+	
+	//光源设置
+	{ 
+		GLfloat sun_light_position[] = { 1.0f, 1.0f, 1.0f, 0.0f }; 
+		GLfloat sun_light_ambient[] = { 0.0f, 0.0f, 0.0f, 1.0f }; 
+		GLfloat sun_light_diffuse[] = { 1.0f, 1.0f, 1.0f, 1.0f }; 
+		GLfloat sun_light_specular[] = { 1.0f, 1.0f, 1.0f, 1.0f }; 
+		glLightfv(GL_LIGHT0, GL_POSITION, sun_light_position); 
+		glLightfv(GL_LIGHT0, GL_AMBIENT, sun_light_ambient); 
+		glLightfv(GL_LIGHT0, GL_DIFFUSE, sun_light_diffuse); 
+		glLightfv(GL_LIGHT0, GL_SPECULAR, sun_light_specular); 
+		glEnable(GL_LIGHT0); 
+		glEnable(GL_LIGHTING); 
+		glEnable(GL_DEPTH_TEST); 
+	}
+
+	GLfloat cube_mat_ambient[] = { 0.0f, 0.0f, 0.5f, 1.0f }; 
+	GLfloat cube_mat_diffuse[] = { 0.5f, 0.5f, 0.5f, 1.0f }; 
+	GLfloat cube_mat_specular[] = { 0.0f, 0.0f, 1.0f, 1.0f }; 
+	GLfloat cube_mat_emission[] = { 0.0f, 0.0f, 0.0f, 1.0f }; 
+	GLfloat cube_mat_shininess = 30.0f; 
+	glMaterialfv(GL_FRONT, GL_AMBIENT, cube_mat_ambient);
+	glMaterialfv(GL_FRONT, GL_DIFFUSE, cube_mat_diffuse); 
+	glMaterialfv(GL_FRONT, GL_SPECULAR, cube_mat_specular);
+	glMaterialfv(GL_FRONT, GL_EMISSION, cube_mat_emission);
+	glMaterialf(GL_FRONT, GL_SHININESS, cube_mat_shininess);
+
+	glRotatef(angle, 0, 0, 1);
+	glutSolidCube(20);
+	glutSwapBuffers();
+	glutPostRedisplay();
+}
+
+void idle2() {
+	angle += 0.01;
 }
 
 void onChangeSize(int width, int height) {
@@ -127,6 +176,8 @@ void onKeyboard(unsigned char key, int x, int y) {
 	case 'v':
 		system_instance.cut();
 		break;
+	case 'r':
+		system_instance.save(".\\save.bmp");
 	default:
 		break;
 	}
@@ -162,12 +213,17 @@ void init() {
 	system_instance.setDrawPointFunc(glVertex2i);
 }
 
+void init2() {
+	glClearColor(0.9, 0.9, 0.9, 0.0);      //指定屏幕背景为黑色
+	glColor3f(1.0, 1.0, 1.0);             //设置绘制颜色为白色
+}
+
 int main(int argc, char** argv) {
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
 	glutInitWindowPosition(200,200);
 	glutInitWindowSize(800, 600);
-	glutCreateWindow("Painting");
+	int mainWindow = glutCreateWindow("Painting");
 	glutDisplayFunc(onDisplay);
 	glutReshapeFunc(onChangeSize);
 	glutMouseFunc(onMouse);
@@ -184,6 +240,13 @@ int main(int argc, char** argv) {
 		glutAttachMenu(GLUT_RIGHT_BUTTON);
 	}
 	init();
+
+	int subWindow = glutCreateSubWindow(mainWindow, 500, 400, 300, 200);
+	glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB | GLUT_DEPTH);
+	glutDisplayFunc(onDisplay2);
+	glutIdleFunc(idle2);
+	init2();
+
 	glutMainLoop();
 	return 0;
 }

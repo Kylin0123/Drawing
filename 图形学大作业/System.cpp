@@ -5,7 +5,9 @@ System::System():
 	isEditable(false),
 	isDragable(true),
 	shapesManager(&linesManager),
-	cutWin(100,100,200,200)
+	cutWin(100,100,200,200),
+	imageSaver(this),
+	is3D(false)
 {
 	ShapesManager::setSystem(this);
 }
@@ -23,6 +25,11 @@ void System::draw()
 	polygonsManager.drawAll(mouseX, mouseY);
 	circlesManager.drawAll(mouseX, mouseY);
 	ellipisesManager.drawAll(mouseX, mouseY);
+}
+
+void System::draw3D()
+{
+	cubesManager.draw();
 }
 
 void System::down(int x, int y)
@@ -138,6 +145,11 @@ void System::doCut(int xmin, int ymin, int xmax, int ymax)
 	if (!shapesManager) 
 		return;
 	shapesManager->cut(xmin, ymin, xmax, ymax);
+}
+
+void System::save(std::string filename)
+{
+	imageSaver.save(filename);
 }
 
 std::string System::getStateString() const { 
