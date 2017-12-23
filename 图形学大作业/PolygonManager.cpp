@@ -14,43 +14,45 @@ PolygonsManager::~PolygonsManager()
 
 void PolygonsManager::add(bool isFill)
 {
-	polygons.push_back(
-		std::shared_ptr<MyPolygon>(new MyPolygon(point_stack))
+	shapes.push_back(
+		std::shared_ptr<Shape>(new MyPolygon(point_stack))
 	);
-	if (isFill)
-		polygons.back()->fill();
+	if (isFill) {
+		std::shared_ptr<MyPolygon> back = std::dynamic_pointer_cast<MyPolygon>(shapes.back());
+		back->fill();
+	}
 }
 
 void PolygonsManager::setFill(bool isFill)
 {
 	this->isFill = isFill;
 }
-
+/*
 void PolygonsManager::clearCurrent()
 {
-	if (!polygons.empty()) {
-		polygons.pop_back();
+	if (!shapes.empty()) {
+		shapes.pop_back();
 	}
 }
-
+*/
 void PolygonsManager::drawAll(int mouseX, int mouseY) const
 {
 	if (mySystem->getInputType() == System::InputType::POLYGON 
 		&& mySystem->getIsEditable()) {
 		
 		assert(point_stack.size() == 0);
-		if (polygons.size() <= 0) return;
+		if (shapes.size() <= 0) return;
 		
-		for (std::vector<std::shared_ptr<MyPolygon>>::const_iterator
-			cit = polygons.begin(); cit != polygons.end() - 1; cit++) {
+		for (std::vector<std::shared_ptr<Shape>>::const_iterator
+			cit = shapes.begin(); cit != shapes.end() - 1; cit++) {
 			(*cit)->draw();
 		}
 		/*多边形数组中最后一个多边形是当前指向的多边形*/
-		std::shared_ptr<MyPolygon> myPolygon = polygons.back();
+		std::shared_ptr<Shape> myPolygon = shapes.back();
 		myPolygon->strongDraw();
 	}
 	else {
-		for (std::shared_ptr<MyPolygon> p : polygons) {
+		for (std::shared_ptr<Shape> p : shapes) {
 			p->draw();
 		}
 		if (point_stack.size() < 1) return;
@@ -83,11 +85,11 @@ void PolygonsManager::down(int x, int y)
 	}
 	else { // is editable
 		assert(point_stack.size() == 0);
-		if (polygons.size() <= 0) { 
+		if (shapes.size() <= 0) { 
 			mySystem->setIsEditable(false);
 			return; 
 		}
-		std::shared_ptr<MyPolygon> myPolygon = polygons.back();
+		std::shared_ptr<Shape> myPolygon = shapes.back();
 
 		if (myPolygon->nearBy(x, y)) {
 
@@ -103,58 +105,27 @@ void PolygonsManager::up(int x, int y)
 {
 }
 
-void PolygonsManager::moveFocusPointTo(int x, int y)
-{
-	if (!mySystem->getIsEditable()) return;
-	if (polygons.size() <= 0) return;
-	std::shared_ptr<MyPolygon> polygon = polygons.back();
-	polygon->moveFocusPointTo(x, y);
-}
-
-void PolygonsManager::translate(int x, int y)
-{
-	if (!mySystem->getIsEditable()) return;
-	if (polygons.size() <= 0) return;
-	assert(point_stack.size() == 0);
-	polygons.back()->translate(x, y);
-}
-
-void PolygonsManager::rotate(float angle)
-{
-	if (!mySystem->getIsEditable()) return;
-	if (polygons.size() <= 0) return;
-	assert(point_stack.size() == 0);
-	polygons.back()->rotate(angle);
-}
-
-void PolygonsManager::scale(float s1, float s2)
-{
-	if (!mySystem->getIsEditable()) return;
-	if (polygons.size() <= 0) return;
-	assert(point_stack.size() == 0);
-	polygons.back()->scale(s1, s2);
-}
-
 void PolygonsManager::fillOrNot()
 {
 	isFill = !isFill;
-	std::shared_ptr<MyPolygon> myPolygon = polygons.back();
+	std::shared_ptr<MyPolygon> back = std::dynamic_pointer_cast<MyPolygon>(shapes.back());
 	if (isFill)
-		myPolygon->fill();
+		back->fill();
 	else
-		myPolygon->unfill();
+		back->unfill();
 }
 
 void PolygonsManager::refill()
 {
-	std::shared_ptr<MyPolygon> myPolygon = polygons.back();
-	myPolygon->refill();
+	std::shared_ptr<MyPolygon> back = std::dynamic_pointer_cast<MyPolygon>(shapes.back());
+	back->refill();
 }
 
 void PolygonsManager::cut(int xmin, int ymin, int xmax, int ymax)
 {
-	if (polygons.size() <= 0) return;
-	if(!polygons.back()->cut(xmin, ymin, xmax, ymax))
-		polygons.pop_back();
+	if (shapes.size() <= 0) return;
+	std::shared_ptr<Cutable> back = std::dynamic_pointer_cast<Cutable>(shapes.back());
+	if(!back->cut(xmin, ymin, xmax, ymax))
+		shapes.pop_back();
 }
 

@@ -28,10 +28,9 @@ public:
 	virtual void translate(int x, int y) override;
 	virtual void rotate(float angle) override;
 	virtual void scale(float s1, float s2) override;
-
 	virtual bool cut(int xmin, int ymin, int xmax, int ymax) override;
+	virtual bool nearBy(int x, int y) override;
 
-	bool nearBy(int x, int y);
 	void fill();
 	void unfill();
 	void refill();

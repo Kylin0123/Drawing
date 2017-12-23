@@ -14,6 +14,7 @@ public:
 	virtual void translate(int x, int y) override;
 	virtual void rotate(float angle) override;
 	virtual void scale(float s1, float s2) override;
+	virtual bool nearBy(int x, int y) override;
 
 	template<typename T>
 	void change(const Matrix<T> &m) {
@@ -28,7 +29,6 @@ public:
 	void setX(int x);
 	void setY(int y);
 
-	bool nearBy(int x, int y) const;
 	int getX() const { return x; }
 	int getY() const { return y; }
 	

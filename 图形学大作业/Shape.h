@@ -15,4 +15,5 @@ public:
 	virtual void translate(int x, int y) = 0;
 	virtual void rotate(float angle) = 0;
 	virtual void scale(float s1, float s2) = 0;
+	virtual bool nearBy(int x, int y) = 0;
 };

@@ -6,8 +6,7 @@ System::System():
 	isDragable(true),
 	shapesManager(&linesManager),
 	cutWin(100,100,200,200),
-	imageSaver(this),
-	is3D(false)
+	imageSaver(this)
 {
 	ShapesManager::setSystem(this);
 }
@@ -29,11 +28,37 @@ void System::draw()
 
 void System::draw3D()
 {
-	cubesManager.draw();
+	
 }
 
 void System::down(int x, int y)
 {
+	if (inputType == InputType::CHOOSE) {
+		if (linesManager.nearBy(x, y)) {
+			inputType = LINE;
+			setIsEditable(true);
+		}
+		else if (beziersManager.nearBy(x, y)) {
+			inputType = BEZIER;
+			setIsEditable(true);
+		}
+		else if (circlesManager.nearBy(x, y)) {
+			inputType = CIRCLE;
+			setIsEditable(true);
+		}
+		else if (ellipisesManager.nearBy(x, y)) {
+			inputType = ELLIPISE;
+			setIsEditable(true);
+		}
+		else if (polygonsManager.nearBy(x, y)) {
+			inputType = POLYGON;
+			setIsEditable(true);
+		}
+		else {
+
+		}
+		return;
+	}
 	if (cutWin.getIsCut()) {
 		if (cutWin.nearBy(x, y)) {
 
@@ -168,6 +193,8 @@ std::string System::getInputTypeString() const {
 		return "CIRCLE";
 	case ELLIPISE: 
 		return "ELLIPISE";
+	case CHOOSE:
+		return "CHOOSE";
 	default: 
 		assert(0);
 		return nullptr;

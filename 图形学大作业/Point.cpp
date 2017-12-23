@@ -25,7 +25,7 @@ void Point::strongDraw() const
 	}
 }
 
-bool Point::nearBy(int x, int y) const
+bool Point::nearBy(int x, int y)
 {
 	if (abs(this->x - x) + abs(this->y - y) <= 10)
 		return true;

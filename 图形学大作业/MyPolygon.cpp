@@ -86,9 +86,9 @@ void MyPolygon::scale(float s1, float s2)
 
 bool MyPolygon::nearBy(int x, int y)
 {
-	for (const Point & p : points) {
+	for (Point & p : points) {
 		if (p.nearBy(x, y)) {
-			focus_point = const_cast<Point*>(&p);
+			focus_point = &p;
 			return true;
 		}
 	}

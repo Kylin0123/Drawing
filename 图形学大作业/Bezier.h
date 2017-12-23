@@ -16,7 +16,7 @@ public:
 	virtual void translate(int x, int y) override;
 	virtual void rotate(float angle) override;
 	virtual void scale(float s1, float s2) override;
-	bool nearBy(int x, int y);
+	virtual bool nearBy(int x, int y) override;
 private:
 	std::vector<Point> points;
 	Rect editRect;

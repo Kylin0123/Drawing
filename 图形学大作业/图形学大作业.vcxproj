@@ -147,7 +147,6 @@
     <ClCompile Include="BeziersManager.cpp" />
     <ClCompile Include="Circle.cpp" />
     <ClCompile Include="CirclesManager.cpp" />
-    <ClCompile Include="CubesManager.cpp" />
     <ClCompile Include="Cutable.cpp" />
     <ClCompile Include="CutWin.cpp" />
     <ClCompile Include="Ellipise.cpp" />
@@ -169,7 +168,6 @@
     <ClInclude Include="BeziersManager.h" />
     <ClInclude Include="Circle.h" />
     <ClInclude Include="CirclesManager.h" />
-    <ClInclude Include="CubesManager.h" />
     <ClInclude Include="Cutable.h" />
     <ClInclude Include="CutWin.h" />
     <ClInclude Include="Ellipise.h" />

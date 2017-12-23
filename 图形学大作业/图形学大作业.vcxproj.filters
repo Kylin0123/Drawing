@@ -72,9 +72,6 @@
     <ClCompile Include="CirclesManager.cpp">
       <Filter>源文件\Manager</Filter>
     </ClCompile>
-    <ClCompile Include="CubesManager.cpp">
-      <Filter>源文件\Manager</Filter>
-    </ClCompile>
     <ClCompile Include="EllipisesManager.cpp">
       <Filter>源文件\Manager</Filter>
     </ClCompile>
@@ -129,9 +126,6 @@
       <Filter>头文件\Manager</Filter>
     </ClInclude>
     <ClInclude Include="CirclesManager.h">
-      <Filter>头文件\Manager</Filter>
-    </ClInclude>
-    <ClInclude Include="CubesManager.h">
       <Filter>头文件\Manager</Filter>
     </ClInclude>
     <ClInclude Include="EllipisesManager.h">

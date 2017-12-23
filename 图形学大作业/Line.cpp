@@ -158,6 +158,7 @@ bool Line::cut(int xmin, int ymin, int xmax, int ymax)
 		p1.getY() + (int)(u1 * (p2.getY() - p1.getY())));
 	end = Point(p1.getX() + (int)(u2 * (p2.getX() - p1.getX())),
 		p1.getY() + (int)(u2 * (p2.getY() - p1.getY())));
+	return true;
 }
 
 bool Line::nearBy(int x, int y)

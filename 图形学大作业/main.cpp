@@ -31,12 +31,15 @@ void onDisplay() {
 	glEnd();
 
 	glRasterPos2i(0, system_instance.getWindowSizeY() - 15);  //起始位置 
-	drawString(std::string("state:") + system_instance.getStateString());
+	drawString("[DEBUG INFO]");
 
 	glRasterPos2i(0, system_instance.getWindowSizeY() - 30);  //起始位置 
+	drawString(std::string("state:") + system_instance.getStateString());
+
+	glRasterPos2i(0, system_instance.getWindowSizeY() - 45);  //起始位置 
 	drawString(std::string("inputType:") + system_instance.getInputTypeString());
 	
-	glRasterPos2i(0, system_instance.getWindowSizeY() - 45);  //起始位置 
+	glRasterPos2i(0, system_instance.getWindowSizeY() - 60);  //起始位置 
 	drawString(std::string("mousePos:")
 		+ std::to_string(system_instance.getMouseX()) + ','
 		+ std::to_string(system_instance.getMouseY()));
@@ -57,35 +60,83 @@ void onDisplay2() {
 	glMatrixMode(GL_MODELVIEW); 
 	glLoadIdentity(); 
 	gluLookAt(15, 12, 10, 0, 0, 0, 0, 0, 1);   //相机视角
-	
-	//光源设置
-	{ 
-		GLfloat sun_light_position[] = { 1.0f, 1.0f, 1.0f, 0.0f }; 
-		GLfloat sun_light_ambient[] = { 0.0f, 0.0f, 0.0f, 1.0f }; 
-		GLfloat sun_light_diffuse[] = { 1.0f, 1.0f, 1.0f, 1.0f }; 
-		GLfloat sun_light_specular[] = { 1.0f, 1.0f, 1.0f, 1.0f }; 
-		glLightfv(GL_LIGHT0, GL_POSITION, sun_light_position); 
-		glLightfv(GL_LIGHT0, GL_AMBIENT, sun_light_ambient); 
-		glLightfv(GL_LIGHT0, GL_DIFFUSE, sun_light_diffuse); 
-		glLightfv(GL_LIGHT0, GL_SPECULAR, sun_light_specular); 
-		glEnable(GL_LIGHT0); 
-		glEnable(GL_LIGHTING); 
-		glEnable(GL_DEPTH_TEST); 
-	}
-
-	GLfloat cube_mat_ambient[] = { 0.0f, 0.0f, 0.5f, 1.0f }; 
-	GLfloat cube_mat_diffuse[] = { 0.5f, 0.5f, 0.5f, 1.0f }; 
-	GLfloat cube_mat_specular[] = { 0.0f, 0.0f, 1.0f, 1.0f }; 
-	GLfloat cube_mat_emission[] = { 0.0f, 0.0f, 0.0f, 1.0f }; 
-	GLfloat cube_mat_shininess = 30.0f; 
-	glMaterialfv(GL_FRONT, GL_AMBIENT, cube_mat_ambient);
-	glMaterialfv(GL_FRONT, GL_DIFFUSE, cube_mat_diffuse); 
-	glMaterialfv(GL_FRONT, GL_SPECULAR, cube_mat_specular);
-	glMaterialfv(GL_FRONT, GL_EMISSION, cube_mat_emission);
-	glMaterialf(GL_FRONT, GL_SHININESS, cube_mat_shininess);
 
 	glRotatef(angle, 0, 0, 1);
-	glutSolidCube(20);
+	const static int size = 15;
+
+	glColor3f(0.5, 0.5, 0.5);
+	glBegin(GL_QUADS);
+	glVertex3i(size, size, size);
+	glVertex3i(size, -size, size);
+	glVertex3i(size, -size, -size);
+	glVertex3i(size, size, -size);
+	glEnd();
+
+	glBegin(GL_QUADS);
+	glVertex3i(-size, size, size);
+	glVertex3i(-size, -size, size);
+	glVertex3i(-size, -size, -size);
+	glVertex3i(-size, size, -size);
+	glEnd();
+	
+	glBegin(GL_QUADS);
+	glVertex3i(size, size, size);
+	glVertex3i(-size, size, size);
+	glVertex3i(-size, size, -size);
+	glVertex3i(size, size, -size);
+	glEnd();
+
+	glBegin(GL_QUADS);
+	glVertex3i(size, -size, size);
+	glVertex3i(-size, -size, size);
+	glVertex3i(-size, -size, -size);
+	glVertex3i(size, -size, -size);
+	glEnd();
+
+	glBegin(GL_QUADS);
+	glVertex3i(size, size, size);
+	glVertex3i(-size, size, size);
+	glVertex3i(-size, -size, size);
+	glVertex3i(size, -size, size);
+	glEnd();
+
+	glBegin(GL_QUADS);
+	glVertex3i(size, size, -size);
+	glVertex3i(-size, size, -size);
+	glVertex3i(-size, -size, -size);
+	glVertex3i(size, -size, -size);
+	glEnd();
+	
+	glColor3f(0, 0, 0);
+	glBegin(GL_LINES);
+	glVertex3i(size, size, size);
+	glVertex3i(size, size, -size);
+	glVertex3i(size, -size, size);
+	glVertex3i(size, -size, -size);
+	glVertex3i(-size, -size, size);
+	glVertex3i(-size, -size, -size);
+	glVertex3i(-size, size, size);
+	glVertex3i(-size, size, -size);
+
+	glVertex3i(size, size, size);
+	glVertex3i(size, -size, size);
+	glVertex3i(size, -size, size);
+	glVertex3i(-size, -size, size);
+	glVertex3i(-size, -size, size);
+	glVertex3i(-size, size, size);
+	glVertex3i(-size, size, size);
+	glVertex3i(size, size, size);
+
+	glVertex3i(size, size, -size);
+	glVertex3i(size, -size, -size);
+	glVertex3i(size, -size, -size);
+	glVertex3i(-size, -size, -size);
+	glVertex3i(-size, -size, -size);
+	glVertex3i(-size, size, -size);
+	glVertex3i(-size, size, -size);
+	glVertex3i(size, size, -size);
+	glEnd();
+
 	glutSwapBuffers();
 	glutPostRedisplay();
 }
@@ -178,6 +229,7 @@ void onKeyboard(unsigned char key, int x, int y) {
 		break;
 	case 'r':
 		system_instance.save(".\\save.bmp");
+		break;
 	default:
 		break;
 	}
@@ -200,6 +252,9 @@ void mainMenu(int id) {
 		break;
 	case 5:
 		system_instance.setInputType(System::InputType::ELLIPISE);
+		break;
+	case 6:
+		system_instance.setInputType(System::InputType::CHOOSE);
 		break;
 	default:
 		assert(0);
@@ -237,6 +292,7 @@ int main(int argc, char** argv) {
 		glutAddMenuEntry("多边形", 3);
 		glutAddMenuEntry("圆", 4);
 		glutAddMenuEntry("椭圆", 5);
+		glutAddMenuEntry("选取", 6);
 		glutAttachMenu(GLUT_RIGHT_BUTTON);
 	}
 	init();

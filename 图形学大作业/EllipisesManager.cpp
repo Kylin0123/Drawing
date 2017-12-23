@@ -17,18 +17,18 @@ void EllipisesManager::drawAll(int mouseX, int mouseY) const
 		&& mySystem->getIsEditable()) {
 		//is editable
 		assert(point_stack.size() == 0);
-		if (ellipises.size() <= 0) return;
+		if (shapes.size() <= 0) return;
 
-		for (std::vector<std::shared_ptr<Ellipise>>::const_iterator
-			cit = ellipises.begin(); cit != ellipises.end() - 1; cit++) {
+		for (std::vector<std::shared_ptr<Shape>>::const_iterator
+			cit = shapes.begin(); cit != shapes.end() - 1; cit++) {
 			(*cit)->draw();
 		}
 
-		std::shared_ptr<Ellipise> ellipise = ellipises.back();
+		std::shared_ptr<Shape> ellipise = shapes.back();
 		ellipise->strongDraw();
 	}
 	else {
-		for (std::shared_ptr<Ellipise> c : ellipises) {
+		for (std::shared_ptr<Shape> c : shapes) {
 			c->draw();
 		}
 		if (point_stack.size() != 1) return;		
@@ -51,18 +51,18 @@ void EllipisesManager::add(const Point & p1, const Point & p2)
 	int r_x = abs(centre_x - p1.getX());
 	int r_y = abs(centre_y - p1.getY());
 	Point centre(centre_x, centre_y);
-	ellipises.push_back(
-		std::shared_ptr<Ellipise>(new Ellipise(centre, r_x, r_y))
+	shapes.push_back(
+		std::shared_ptr<Shape>(new Ellipise(centre, r_x, r_y))
 	);
 }
-
+/*
 void EllipisesManager::clearCurrent()
 {
-	if (!ellipises.empty()) {
-		ellipises.pop_back();
+	if (!shapes.empty()) {
+		shapes.pop_back();
 	}
 }
-
+*/
 void EllipisesManager::down(int x, int y)
 {
 	if (!mySystem->getIsEditable()) {
@@ -72,11 +72,11 @@ void EllipisesManager::down(int x, int y)
 	else {
 		//is editable
 		assert(point_stack.size() == 0);
-		if (ellipises.size() <= 0) {
+		if (shapes.size() <= 0) {
 			mySystem->setIsEditable(false);
 			return;
 		}
-		std::shared_ptr<Ellipise> ellipise = ellipises.back();
+		std::shared_ptr<Shape> ellipise = shapes.back();
 
 		if (ellipise->nearBy(x, y)) {
 			
@@ -102,47 +102,4 @@ void EllipisesManager::up(int x, int y)
 	else {
 		//is editable
 	}
-}
-
-void EllipisesManager::moveFocusPointTo(int x, int y)
-{
-	if (!mySystem->getIsEditable()) return;
-	if (ellipises.size() <= 0) return;
-	std::shared_ptr<Ellipise> ellipise = ellipises.back();
-	ellipise->moveFocusPointTo(x, y);
-}
-
-void EllipisesManager::translate(int x, int y)
-{
-	if (!mySystem->getIsEditable()) return;
-	if (ellipises.size() <= 0) return;
-	assert(point_stack.size() == 0);
-	ellipises.back()->translate(x, y);
-}
-
-void EllipisesManager::rotate(float angle)
-{
-	if (!mySystem->getIsEditable()) return;
-	if (ellipises.size() <= 0) return;
-	assert(point_stack.size() == 0);
-	ellipises.back()->rotate(angle);
-}
-
-void EllipisesManager::scale(float s1, float s2)
-{
-	if (!mySystem->getIsEditable()) return;
-	if (ellipises.size() <= 0) return;
-	assert(point_stack.size() == 0);
-	ellipises.back()->scale(s1, s2);
-	/*if (!mySystem->getIsEditable()) return;
-	assert(point_stack.size() == 2);
-	float m[3][3] = {
-		{ s1, 0, 0 },
-		{ 0, s2, 0 },
-		{ 0, 0, 1 }
-	};
-	Matrix<float> matrix((float*)m, 3, 3);
-	for (size_t i = 0; i < point_stack.size(); i++) {
-		point_stack[i].change(matrix);
-	}*/
 }

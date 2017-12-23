@@ -8,7 +8,6 @@
 #include "PolygonsManager.h"
 #include "CirclesManager.h"
 #include "EllipisesManager.h"
-#include "CubesManager.h"
 #include "Rect.h"
 #include "CutWin.h"
 #include "ImageSaver.h"
@@ -34,7 +33,7 @@ public:
 	void scale(float s1, float s2);
 
 	/*built-in types*/
-	enum InputType { LINE, BEZIER, POLYGON, CIRCLE, ELLIPISE };
+	enum InputType { LINE, BEZIER, POLYGON, CIRCLE, ELLIPISE, CHOOSE };
 	typedef void(WINAPI *PDrawPointFunc)(GLint, GLint);
 	
 	/*setter*/
@@ -65,7 +64,6 @@ private:
 	PolygonsManager polygonsManager;
 	CirclesManager circlesManager;
 	EllipisesManager ellipisesManager;
-	CubesManager cubesManager;
 
 	CutWin cutWin;
 	ImageSaver imageSaver;
@@ -79,5 +77,4 @@ private:
 	int mouseX, mouseY;
 	bool isEditable;
 	bool isDragable;
-	bool is3D;
 };
