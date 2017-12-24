@@ -3,7 +3,7 @@
 
 
 CutWin::CutWin(int x1, int y1, int x2, int y2):
-	cutRect(x1, y1, x2, y2), isCut(false)
+	cutRect(x1, y1, x2, y2), isCut(false), focus_point(nullptr)
 {
 }
 

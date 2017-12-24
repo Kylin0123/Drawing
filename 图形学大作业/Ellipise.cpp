@@ -3,7 +3,7 @@
 
 
 Ellipise::Ellipise(const Point & centre, int r_x, int r_y):
-	centre(centre), r_x(r_x), r_y(r_y),
+	centre(centre), r_x(r_x), r_y(r_y), focus_point(nullptr),
 	editRect(
 		centre.getX()-r_x, 
 		centre.getY()-r_y,
@@ -70,6 +70,7 @@ void Ellipise::strongDraw() const
 
 void Ellipise::moveFocusPointTo(int x, int y)
 {
+	if (focus_point == nullptr) return;
 	if (focus_point == &centre) {
 		int dx = x - centre.getX();
 		int dy = y - centre.getY();

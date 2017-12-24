@@ -3,7 +3,7 @@
 
 
 Line::Line(const Point & start, const Point & end):
-	start(start), end(end)
+	start(start), end(end), focus_point(nullptr)
 {
 }
 

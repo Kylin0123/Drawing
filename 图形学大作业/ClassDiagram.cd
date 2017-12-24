@@ -1,114 +1,142 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1">
-  <Class Name="Bezier" Collapsed="true">
-    <Position X="0.75" Y="1.75" Width="1.5" />
+  <Class Name="CutWin" Collapsed="true">
+    <Position X="14.75" Y="0.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAACAAAAAAAAAAAIAAAAAAAAAAAACgAAAAAAAAAA=</HashCode>
-      <FileName>Bezier.h</FileName>
+      <HashCode>AAAAAABAgAAAEAAgABKAgAAACKAABIAAAAAAAABAAAA=</HashCode>
+      <FileName>CutWin.h</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="BeziersManager" Collapsed="true">
-    <Position X="2.75" Y="4.75" Width="1.5" />
+  <Class Name="ImageSaver" Collapsed="true">
+    <Position X="18.25" Y="0.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AABAAAgAAAACAAAgAAAQAAACAAAAAAEBAAAAAgACBAA=</HashCode>
-      <FileName>BeziersManager.h</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="Circle" Collapsed="true">
-    <Position X="7.5" Y="1.75" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAQCAgAAAAAAAIAAAAAQAgAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>Circle.h</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="CirclesManager" Collapsed="true">
-    <Position X="7.25" Y="4.75" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAABAAAAAACAAAAAAQQAAACAAAAAAABACAAAiACBAA=</HashCode>
-      <FileName>CirclesManager.h</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="Ellipise" Collapsed="true">
-    <Position X="3" Y="1.75" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAQAAAAAAAEAQIAAIAAAAAAAAAAAABAAAAAAAA=</HashCode>
-      <FileName>Ellipise.h</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="EllipisesManager" Collapsed="true">
-    <Position X="5" Y="4.75" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAABAAAAAACAAAAAAAQBAACAAAAAAABQAAAAgACBAA=</HashCode>
-      <FileName>EllipisesManager.h</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="Line" Collapsed="true">
-    <Position X="9.75" Y="1.75" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AIAAAAACAAAAAAAgAAIAAIAAAAAAAAAAAAAAAAABAAA=</HashCode>
-      <FileName>Line.h</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="LinesManager" Collapsed="true">
-    <Position X="9.5" Y="4.75" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAKAAAAAAAQAABCAAIAAAABAAAAAgACBAA=</HashCode>
-      <FileName>LinesManager.h</FileName>
+      <HashCode>AAAAAAAAAACAAACAAAAAgAAAAAAQAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ImageSaver.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Matrix&lt;T&gt;" Collapsed="true">
-    <Position X="16.25" Y="0.5" Width="1.5" />
+    <Position X="14.75" Y="1.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAgAAAAAAAAAAAAAAQAAAAAAgAAAAAAAQAAAAEgA=</HashCode>
       <FileName>Matrix.h</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="Point" Collapsed="true">
-    <Position X="5.25" Y="1.75" Width="1.5" />
+  <Class Name="Rect" Collapsed="true">
+    <Position X="16.5" Y="1.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAEAAAAAAgAAiAAYGAAAAAAAACAAAAABgAGAAAAA=</HashCode>
+      <HashCode>AAAAAAAAiAAIEAAkABIAAIEAiKCCCBAAhAAAMAAABAA=</HashCode>
+      <FileName>Rect.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="System" Collapsed="true">
+    <Position X="18.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAAoAEAEAKLCGAAAAgIQpkACCKAA5MAQBGIAIkggBOA=</HashCode>
+      <FileName>System.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Bezier" Collapsed="true">
+    <Position X="3.25" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAAAAADAAAAAAAAgAAIQAAACAAAACIACgAAAAAAABAA=</HashCode>
+      <FileName>Bezier.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Circle" Collapsed="true">
+    <Position X="7.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAAAAABQCAgAAAAgAAIQAAACQAgACIAAAAAAAAAABAA=</HashCode>
+      <FileName>Circle.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Cutable" Collapsed="true">
+    <Position X="0.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAAAAAECAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Cutable.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Ellipise" Collapsed="true">
+    <Position X="12.25" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAAAAABQAAAAAAAkAQIQAIACAAAACIAAAABAAAAABAA=</HashCode>
+      <FileName>Ellipise.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Line" Collapsed="true">
+    <Position X="3.5" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAIAABGAAAAAAAgAAIQAIACAAAACIAgAAAAAAABBAA=</HashCode>
+      <FileName>Line.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Point" Collapsed="true">
+    <Position X="5.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAEAAAAAAgAAiAAYWAAACAAAACIAAAABgAGAABAA=</HashCode>
       <FileName>Point.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Edge" Collapsed="true">
-    <Position X="14.5" Y="0.5" Width="1.5" />
+    <Position X="16.5" Y="0.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAABAAAAAFAA=</HashCode>
       <FileName>MyPolygon.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="MyPolygon" Collapsed="true">
-    <Position X="12" Y="1.75" Width="1.5" />
+    <Position X="6.5" Y="3.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAgAAACAAAAYAAAAkgIAACAAAAAAAAAAAAgAAAAAAAA=</HashCode>
+      <HashCode>QAgAAADEAABYAAAgkgIQACACAAAACIAAAAgAAAAABAA=</HashCode>
       <FileName>MyPolygon.h</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="PolygonsManager" Collapsed="true">
-    <Position X="0.5" Y="4.75" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAABAAAAAACAAAAAAAQAAACgAEAAAABgCAAAgACBAA=</HashCode>
-      <FileName>PolygonsManager.h</FileName>
-    </TypeIdentifier>
-  </Class>
   <Class Name="Shape" Collapsed="true">
-    <Position X="6.25" Y="0.5" Width="1.5" />
+    <Position X="6.5" Y="0.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAACA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAgAAIQAAACAAAACIAAAAAAAAAABCA=</HashCode>
       <FileName>Shape.h</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="System" Collapsed="true">
-    <Position X="14.5" Y="1.5" Width="1.5" />
+  <Class Name="BeziersManager" Collapsed="true">
+    <Position X="9.75" Y="6.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>IAAoAEBAAKJCCAAAAgIQBkACACAA4IAQBCIAIgAgBOA=</HashCode>
-      <FileName>System.h</FileName>
+      <HashCode>AAAAAAgEAAACAAAgAAAAAAAAAAAAAAEBAAAAAggCAAA=</HashCode>
+      <FileName>BeziersManager.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CirclesManager" Collapsed="true">
+    <Position X="0.75" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAABAAEAAACAAAAAAAAAAAAAAAAAAABACAAAigCAAA=</HashCode>
+      <FileName>CirclesManager.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EllipisesManager" Collapsed="true">
+    <Position X="3" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAABAAEAAACAAAAAAAAAAAAAAAAAAABQAAAAggCAAA=</HashCode>
+      <FileName>EllipisesManager.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LinesManager" Collapsed="true">
+    <Position X="5.25" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAEAAAKAAAAAAAAAABAAAAAAAABAAAAAggCAAA=</HashCode>
+      <FileName>LinesManager.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PolygonsManager" Collapsed="true">
+    <Position X="7.5" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAABAgEAABCAAAAAAAAAAAAgAAAAAABgCAAAggCAAA=</HashCode>
+      <FileName>PolygonsManager.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="ShapesManager" Collapsed="true">
-    <Position X="5" Y="3.5" Width="1.5" />
+    <Position X="5.25" Y="5.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAICAAAAAgAQAAACAAAAAAABBAABQgAABIQ=</HashCode>
+      <HashCode>AAAAAAAEAAICAAAgAAAQAAACAAAEAIABCAABQkgABAQ=</HashCode>
       <FileName>ShapesManager.h</FileName>
     </TypeIdentifier>
   </Class>

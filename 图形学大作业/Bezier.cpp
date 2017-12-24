@@ -4,7 +4,8 @@
 
 Bezier::Bezier(const std::vector<Point> & points):
 	points(points),
-	editRect(0,0,0,0)
+	editRect(0,0,0,0),
+	focus_point(nullptr)
 {
 	editRect.reshape(points);
 }
@@ -74,6 +75,7 @@ void Bezier::strongDraw() const
 
 void Bezier::moveFocusPointTo(int x, int y)
 {
+	if (focus_point == nullptr) return;
 	focus_point->set(x, y);
 	editRect.reshape(points);
 }

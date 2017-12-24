@@ -2,7 +2,7 @@
 
 
 Circle::Circle(const Point & centre, int radius):
-	centre(centre), radius(radius),
+	centre(centre), radius(radius), focus_point(nullptr),
 	editRect(centre.getX()-radius, centre.getY()-radius,
 		centre.getX() + radius, centre.getY() + radius)
 {
@@ -45,6 +45,7 @@ void Circle::strongDraw() const
 
 void Circle::moveFocusPointTo(int x, int y)
 {
+	if (focus_point == nullptr) return;
 	if (focus_point == &centre) {
 		int dx = x - centre.getX();
 		int dy = y - centre.getY();

@@ -9,7 +9,8 @@
 
 MyPolygon::MyPolygon(const std::vector<Point> & points):
 	points(points),
-	editRect(0,0,0,0)
+	editRect(0,0,0,0),
+	focus_point(nullptr)
 {
 	editRect.reshape(points);
 }
